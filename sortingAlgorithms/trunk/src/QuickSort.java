@@ -11,7 +11,7 @@ public class QuickSort {
 	}
 
 	public void init(int[] values) {
-		quicksort(values, 0, values.length - 1);
+		quickSort(values, 0, values.length - 1);
 
 		// tisk
 		for (int i : values) {
@@ -19,7 +19,7 @@ public class QuickSort {
 		}
 	}
 
-	private void quicksort(int[] values, int start, int end) {
+	private void quickSort(int[] values, int start, int end) {
 		int value; // pomocná promìnná
 		int pivot = values[(start + end) / 2];
 		int left = start;
@@ -41,9 +41,9 @@ public class QuickSort {
 		} while (left <= right);
 
 		if (start < right)
-			quicksort(values, start, right);
+			quickSort(values, start, right);
 		if (left < end)
-			quicksort(values, left, end);
+			quickSort(values, left, end);
 	}
 
 }
