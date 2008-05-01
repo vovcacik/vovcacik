@@ -1,9 +1,18 @@
+import java.util.Random;
+
 public class QuickSort {
 
 	public static void main(String[] args) {
 		QuickSort qs = new QuickSort();
-		qs.init(new int[] { -15, 25, 45, -59, -78, 2, -5, 96, 85, -84, 26, -35,
-				45, -41, -65, 0, 45, 65, 42, -12, -59 });
+		
+		Random nahoda = new Random();
+		int length = 5000000;
+		int[] pole = new int[length];
+		for (int i = 0; i < pole.length; i++) {
+			pole[i] = nahoda.nextInt(length)-length/2;
+		}
+		
+		qs.init(pole);
 	}
 
 	public QuickSort() {
@@ -11,12 +20,10 @@ public class QuickSort {
 	}
 
 	public void init(int[] values) {
+		double zacatek = System.currentTimeMillis();
 		quickSort(values, 0, values.length - 1);
-
-		// tisk
-		for (int i : values) {
-			System.out.print(i + ", ");
-		}
+		System.out.print("zacatek = " + zacatek + "\nkonec: " + System.currentTimeMillis()+"\n");
+		System.out.print("rozdil = " + (System.currentTimeMillis() - zacatek));
 	}
 
 	private void quickSort(int[] values, int start, int end) {

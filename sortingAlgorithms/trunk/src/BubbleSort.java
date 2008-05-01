@@ -1,9 +1,22 @@
+import java.util.Random;
+
 
 
 public class BubbleSort {
 	public static void main(String[] args) {
 		BubbleSort bs = new BubbleSort();
-		bs.init(new int[] { 5, 4, -9, 78, -25, 4, 42, -100, 42 });
+		
+		Random nahoda = new Random();
+		int length = 50000;
+		int[] pole = new int[length];
+		for (int i = 0; i < pole.length; i++) {
+			pole[i] = nahoda.nextInt(length)-length/2;
+		}
+		
+		double zacatek = System.currentTimeMillis();
+		bs.init(pole);
+		System.out.print("zacatek = " + zacatek + "\nkonec: " + System.currentTimeMillis()+"\n");
+		System.out.print("rozdil = " + (System.currentTimeMillis() - zacatek));
 	}
 
 	public BubbleSort() {
@@ -21,10 +34,6 @@ public class BubbleSort {
 					prvky[e] = pomocna;
 				}
 			}
-		}
-
-		for (int i : prvky) {
-			System.out.print(i + ", ");
 		}
 	}
 }
