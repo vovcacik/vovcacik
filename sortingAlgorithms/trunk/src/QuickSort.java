@@ -6,7 +6,7 @@ public class QuickSort {
 		QuickSort qs = new QuickSort();
 		
 		Random nahoda = new Random();
-		int length = 5000000;
+		int length = 15471859;
 		int[] pole = new int[length];
 		for (int i = 0; i < pole.length; i++) {
 			pole[i] = nahoda.nextInt(length)-length/2;
