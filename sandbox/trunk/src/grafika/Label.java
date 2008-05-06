@@ -1,5 +1,7 @@
 package grafika;
 
+import java.awt.Color;
+
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
@@ -17,9 +19,11 @@ public class Label {
 		dialog.setTitle("label");
 		
 		label = new JLabel();
-		label.setText("ukázka textu");
+		label.setText("ukázka textu\n\n");
+		label.setForeground(new Color(0,255,0));
 		
 		dialog.add(label);
+		dialog.pack();
 	}
 	
 	public void setVisible(boolean viditelnost) {
