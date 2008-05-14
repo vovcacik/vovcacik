@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Vlastimil Ovcacik -->
+
+<project name="Nazev Projektu" basedir="." default="main">
+	
+	<property name="src" location="src"/>
+	
+	<target name="main">
+		<antcall target="print"></antcall>
+	</target>
+	
+    <target name="print">
+    	<tstamp/>
+    	<echo>${DSTAMP}</echo>
+    	
+    	<echo>${basedir}</echo>
+    	<echo>${os.name}</echo>
+    	<echo>${ant.file}</echo>
+    	<echo>${ant.version}</echo>
+    	<echo>${ant.project.name}</echo>
+    	<echo>${ant.java.version}</echo>
+    	<echo>${ant.home}</echo>
+    	
+    	<echo>${nenastavenaPromenna}</echo>
+    </target>
+	
+</project>
