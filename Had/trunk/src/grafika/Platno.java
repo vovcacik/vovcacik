@@ -63,9 +63,9 @@ public class Platno extends JPanel {
 			}
 		}
 
-		this.had = new Had(this, iniPoziceHada, 4, Smer.NORTH);
+		this.had = new Had(this, iniPoziceHada, 4, Smer.SOUTH);
 		Timer timer = new Timer();
-		timer.schedule(new Tik(), 0, 150);
+		timer.schedule(new Tik(), 0, 300);
 
 	}
 
@@ -92,5 +92,13 @@ public class Platno extends JPanel {
 	public int[] getNextPozice(int[] pozice, Smer smer) {
 		int[] krok = smer.getKrok();
 		return new int[] {pozice[0] + krok[0], pozice[1] + krok[1]};
+	}
+
+	public void konec() {
+
+	}
+
+	public boolean checkPozice(int[] pozice) {
+		return (pozice[0] >= 0 && pozice[0] < column) && (pozice[1] >= 0 && pozice[1] < rows);
 	}
 }

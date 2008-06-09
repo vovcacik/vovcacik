@@ -61,7 +61,15 @@ public class Had {
 		Souradnice nova;
 		int[] pozice = new int[] {prvni.getX(), prvni.getY()};
 		int[] dalsiPozice = platno.getNextPozice(pozice, smer);
+		if (!platno.checkPozice(dalsiPozice)) {
+			platno.konec();
+			return;
+		}
 		nova = platno.getSouradnice(dalsiPozice);
+		if (nova.getStav().equals(Stav.HAD)) {
+			platno.konec();
+			return;
+		}
 		nova.setStav(Stav.HAD);
 		souradnice.add(0, nova);
 

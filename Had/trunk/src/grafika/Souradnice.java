@@ -30,4 +30,8 @@ public class Souradnice {
 		this.stav = stav;
 	}
 
+	public Stav getStav() {
+		return this.stav;
+	}
+
 }

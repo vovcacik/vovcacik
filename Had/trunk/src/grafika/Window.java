@@ -12,7 +12,7 @@ public class Window {
 		hlavniOkno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		hlavniOkno.setResizable(false);
 
-		platno = new Platno(hlavniOkno, 300, 300, 10, 10, new int[] {5, 5});
+		platno = new Platno(hlavniOkno, 200, 200, 10, 10, new int[] {5, 5});
 
 		hlavniOkno.add(platno);
 		hlavniOkno.pack();
