@@ -20,6 +20,8 @@ public class EulerStart {
 			if (balanced(i)) {
 				sum += i;
 			}
+			System.out.println((Math.pow(10, n) - i) / Math.pow(10, n));
+			System.out.println("\f");
 		}
 		return sum;
 	}
