@@ -8,7 +8,7 @@ public class EulerStart {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		double sumaBalancu = T(47);
+		double sumaBalancu = T(15);
 		System.out.println(new BigDecimal(sumaBalancu));
 		double vysledek = sumaBalancu % Math.pow(3, 15);
 		System.out.println(new BigDecimal(vysledek));
@@ -16,12 +16,15 @@ public class EulerStart {
 
 	private static double T(double n) {
 		double sum = 0;
+		double history = 0.00001;
 		for (double i = Math.pow(10, n) - 1; i > 0; i--) {
 			if (balanced(i)) {
 				sum += i;
 			}
-			System.out.println((Math.pow(10, n) - i) / Math.pow(10, n));
-			System.out.println("\f");
+			if ((Math.pow(10, n) - i) / Math.pow(10, n) - history >= 0.00001) {
+				System.out.println((Math.pow(10, n) - i) / Math.pow(10, n));
+				history = (Math.pow(10, n) - i) / Math.pow(10, n);
+			}
 		}
 		return sum;
 	}
