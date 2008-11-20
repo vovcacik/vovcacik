@@ -1,12 +1,17 @@
 package euler;
 
+import java.math.BigDecimal;
+
 public class EulerStart {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println(T(1d));
+		double sumaBalancu = T(47);
+		System.out.println(new BigDecimal(sumaBalancu));
+		double vysledek = sumaBalancu % Math.pow(3, 15);
+		System.out.println(new BigDecimal(vysledek));
 	}
 
 	private static double T(double n) {
@@ -19,15 +24,29 @@ public class EulerStart {
 		return sum;
 	}
 
-	private static boolean balanced(double i) {
-		String bali = String.valueOf((int) i);
-		double firstsum = 0;
-		double secondsum = 0;
-		for (int j = 0; j <= (bali.length() / 2); j++) {
-			firstsum += Integer.parseInt(bali.substring(j, j + 1));
-			secondsum += Integer.parseInt(bali.substring(bali.length() - 1 - j, bali.length() - j));
+	private static boolean balanced(double d) {
+		double length = Math.floor(Math.log10(d)) + 1;
+		double lowHalf = 0;
+		double highHalf = 0;
+		for (double i = 0; i < Math.ceil(length / 2); i++) {
+			lowHalf += intAt(d, i);
 		}
-		if (firstsum == secondsum) return true;
-		return false;
+		for (double i = Math.floor(length / 2); i < length; i++) {
+			highHalf += intAt(d, i);
+		}
+		if (lowHalf == highHalf) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private static double intAt(double d, double pos) {
+		for (double k = (Math.floor(Math.log10(d))); k > pos; k--) {
+			while (d >= Math.pow(10, k)) {
+				d -= Math.pow(10, k);
+			}
+		}
+		return Math.floor(d / Math.pow(10, pos));
 	}
 }
