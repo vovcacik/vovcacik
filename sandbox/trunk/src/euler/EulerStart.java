@@ -8,20 +8,29 @@ public class EulerStart {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		double sumaBalancu = T(15);
-		System.out.println(new BigDecimal(sumaBalancu));
+		if (args.length != 1) {
+			System.err.println("Zadejte pouze jeden argument");
+			System.exit(1);
+		}
+		int pocet = Integer.parseInt(args[0]);
+		if (pocet <= 0) {
+			System.err.println("Argument je kladne celéé cislo");
+			System.exit(1);
+		}
+		double sumaBalancu = T((double) pocet);
+		System.out.println("Suma balancovanyh cisel: \n" + new BigDecimal(sumaBalancu));
 		double vysledek = sumaBalancu % Math.pow(3, 15);
-		System.out.println(new BigDecimal(vysledek));
+		System.out.println("Vysledek: \n" + new BigDecimal(vysledek));
 	}
 
 	private static double T(double n) {
 		double sum = 0;
-		double history = 0.00001;
-		for (double i = Math.pow(10, n) - 1; i > 0; i--) {
+		double history = 0.99;
+		for (double i = 1; i <= Math.pow(10, n) - 1; i++) {
 			if (balanced(i)) {
 				sum += i;
 			}
-			if ((Math.pow(10, n) - i) / Math.pow(10, n) - history >= 0.00001) {
+			if (history - (Math.pow(10, n) - i) / Math.pow(10, n) >= 0.01) {
 				System.out.println((Math.pow(10, n) - i) / Math.pow(10, n));
 				history = (Math.pow(10, n) - i) / Math.pow(10, n);
 			}
