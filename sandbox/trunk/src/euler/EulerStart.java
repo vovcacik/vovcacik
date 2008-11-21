@@ -31,7 +31,7 @@ public class EulerStart {
 				sum += i;
 			}
 			if (history - (Math.pow(10, n) - i) / Math.pow(10, n) >= 0.01) {
-				System.out.println((Math.pow(10, n) - i) / Math.pow(10, n));
+				System.out.println((Math.pow(10, n) - i) * 100 / Math.pow(10, n));
 				history = (Math.pow(10, n) - i) / Math.pow(10, n);
 			}
 		}
