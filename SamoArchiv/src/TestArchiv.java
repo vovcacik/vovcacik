@@ -5,7 +5,7 @@ public class TestArchiv extends TestCase {
 	Archiv archivRozbal;
 	String cestaRozbal = "C:/test/rozbal/archiv.jar";
 	Archiv archivZabal;
-	String cestaZabal = "C:/test/zabal/test.zip";
+	String cestaZabal = "C:/test/build.jar";
 
 	public TestArchiv(String nazev) {
 		super(nazev);
@@ -24,10 +24,14 @@ public class TestArchiv extends TestCase {
 	}
 
 	public void testZabal() {
-		// archivZabal.zabal("C:/test/zabal/");
+		// archivZabal.zabal("C:/test/zabal/kufr/");
 	}
 
 	public void testIsPrazdny() {
-		archivRozbal.isPrazdny();
+		// archivRozbal.isPrazdny();
+	}
+
+	public void testPribal() {
+		archivZabal.pribal("C:/test/build.jar", "C:/test/zabal/kufr/");
 	}
 }

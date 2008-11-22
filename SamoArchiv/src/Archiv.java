@@ -4,12 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
+import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -135,4 +138,73 @@ public class Archiv {
 			return false;
 		}
 	}
+
+	public void pribal(String jar, String adresar) {
+
+		File jarFile = new File(jar);
+		File file = new File(adresar);
+		File files[] = file.listFiles();
+
+		// get a temp file
+		File tempFile;
+		try {
+			tempFile = File.createTempFile(jarFile.getName(), null);
+
+			// delete it, otherwise you cannot rename your existing zip to it.
+			tempFile.delete();
+
+			boolean renameOk = jarFile.renameTo(tempFile);
+			if (!renameOk) {
+				throw new RuntimeException("could not rename the file " + jarFile.getAbsolutePath() + " to " + tempFile.getAbsolutePath());
+			}
+			byte[] buf = new byte[1024];
+
+			JarInputStream jin = new JarInputStream(new FileInputStream(tempFile));
+			JarOutputStream out = new JarOutputStream(new FileOutputStream(jarFile));
+
+			JarEntry entry = jin.getNextJarEntry();
+			while (entry != null) {
+				String name = entry.getName();
+				boolean notInFiles = true;
+				for (File f : files) {
+					if (f.getName().equals(name)) {
+						notInFiles = false;
+						break;
+					}
+				}
+				if (notInFiles) {
+					// Add ZIP entry to output stream.
+					out.putNextEntry(new JarEntry(name));
+					// Transfer bytes from the ZIP file to the output file
+					int len;
+					while ((len = jin.read(buf)) > 0) {
+						out.write(buf, 0, len);
+					}
+				}
+				entry = jin.getNextJarEntry();
+			}
+			// Close the streams
+			jin.close();
+			// Compress the files
+			for (int i = 0; i < files.length; i++) {
+				InputStream in = new FileInputStream(files[i]);
+				// Add ZIP entry to output stream.
+				out.putNextEntry(new JarEntry(files[i].getName()));
+				// Transfer bytes from the file to the ZIP file
+				int len;
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+				// Complete the entry
+				out.closeEntry();
+				in.close();
+			}
+			// Complete the ZIP file
+			out.close();
+			tempFile.delete();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 }
