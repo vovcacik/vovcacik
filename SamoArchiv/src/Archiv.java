@@ -8,8 +8,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -17,37 +15,33 @@ import java.util.zip.ZipOutputStream;
 
 public class Archiv {
 
-	private String cestaArchiv = "";
-
-	public Archiv(String cestaArchiv) {
-		this.cestaArchiv = cestaArchiv;
+	public Archiv() {
 	}
 
 	void rozbal(String cestaRozbal) {
 		final int BUFFER = 2048;
 		try {
+			File adresarRozbalit = new File(cestaRozbal);
+			adresarRozbalit.mkdirs();
 			BufferedOutputStream dest = null;
 			BufferedInputStream is = null;
-			JarEntry entry;
-			JarFile jarfile = new JarFile(cestaArchiv);
-			Enumeration e = jarfile.entries();
+			ZipEntry entry;
+			ZipFile zipFile = new ZipFile("C:/test/zabal/novyjar.jar");
+			Enumeration e = zipFile.entries();
 
 			while (e.hasMoreElements()) {
-				entry = (JarEntry) e.nextElement();
+				entry = (ZipEntry) e.nextElement();
 
 				int iLomitka;
-				if ((iLomitka = entry.getName().lastIndexOf('/')) != -1) {
-					// Assume directories are stored parents first then
-					// children.
+				String jmeno = entry.getName().replace('\\', '/');
+				if ((iLomitka = jmeno.lastIndexOf('/')) != -1) {
 					String dir = entry.getName().substring(0, iLomitka);
 					System.out.println("Extracting directory: " + cestaRozbal + dir);
-					// This is not robust, just for demonstration purposes.
-					(new File(cestaRozbal + dir)).mkdir();
-
+					(new File(cestaRozbal + dir)).mkdirs();
 				}
 
 				System.out.println("Extracting: " + entry);
-				is = new BufferedInputStream(jarfile.getInputStream(entry));
+				is = new BufferedInputStream(zipFile.getInputStream(entry));
 				int count;
 				byte data[] = new byte[BUFFER];
 				FileOutputStream fos = new FileOutputStream(cestaRozbal + entry.getName());
@@ -59,37 +53,6 @@ public class Archiv {
 				dest.close();
 				is.close();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public void zabal(String adresar) {
-		final int BUFFER = 2048;
-		try {
-			File f = new File(adresar);
-			String files[] = f.list();
-			BufferedInputStream origin = null;
-			FileOutputStream dest = new FileOutputStream(cestaArchiv);
-			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
-			// out.setMethod(ZipOutputStream.DEFLATED);
-			byte data[] = new byte[BUFFER];
-			// get a list of files from current directory
-
-			for (int i = 0; i < files.length; i++) {
-				System.out.println("Adding: " + files[i]);
-				FileInputStream fi = new FileInputStream(adresar + files[i]);
-				origin = new BufferedInputStream(fi, BUFFER);
-				ZipEntry entry = new ZipEntry(files[i]);
-				out.putNextEntry(entry);
-				int count;
-				while ((count = origin.read(data, 0, BUFFER)) != -1) {
-					out.write(data, 0, count);
-				}
-				origin.close();
-			}
-			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -120,18 +83,17 @@ public class Archiv {
 			System.out.println("TRUE");
 			return true;
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			return true;
 		}
 	}
 
-	public void pribal(String newJar, String adresar) {
+	public void zabal(String newJar, String adresar) {
 		URL url = this.getClass().getResource("Archiv.class");
 		String path = url.getPath();
-		System.out.println(path);
+		System.out.println("url path " + path);
 		path = path.substring("file:/".length(), path.lastIndexOf('!'));
-		System.out.println(path);
+		System.out.println("zkracena path " + path);
 
 		File jarFile = new File(path);
 		File folder = new File(adresar);
@@ -180,7 +142,7 @@ public class Archiv {
 				}
 				BufferedInputStream in = new BufferedInputStream(new FileInputStream(files[i].getPath()));
 				// Add ZIP entry to output stream.
-				String entryPath = files[i].getPath().substring(files[i].getPath().indexOf("C:/test/zabal/kufr2/") + "C:/test/zabal/kufr2/".length());
+				String entryPath = files[i].getPath().substring(files[i].getPath().indexOf("C:/test/zabal/kufr/") + "C:/test/zabal/kufr/".length());
 				System.out.println("entrypath: " + entryPath);
 				out.putNextEntry(new ZipEntry("/trunk" + entryPath));
 				// Transfer bytes from the file to the ZIP file
