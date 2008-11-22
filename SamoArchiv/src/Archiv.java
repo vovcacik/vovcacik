@@ -4,16 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
-import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class Archiv {
@@ -142,9 +140,11 @@ public class Archiv {
 	public void pribal(String jar, String adresar) {
 
 		File jarFile = new File(jar);
-		File file = new File(adresar);
-		File files[] = file.listFiles();
-
+		File folder = new File(adresar);
+		File files[] = seznam(folder.listFiles());
+		for (File f : files) {
+			System.out.println(f.getPath());
+		}
 		// get a temp file
 		File tempFile;
 		try {
@@ -159,10 +159,10 @@ public class Archiv {
 			}
 			byte[] buf = new byte[1024];
 
-			JarInputStream jin = new JarInputStream(new FileInputStream(tempFile));
-			JarOutputStream out = new JarOutputStream(new FileOutputStream(jarFile));
+			ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(tempFile)));
+			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(jarFile)));
 
-			JarEntry entry = jin.getNextJarEntry();
+			ZipEntry entry = zin.getNextEntry();
 			while (entry != null) {
 				String name = entry.getName();
 				boolean notInFiles = true;
@@ -174,22 +174,27 @@ public class Archiv {
 				}
 				if (notInFiles) {
 					// Add ZIP entry to output stream.
-					out.putNextEntry(new JarEntry(name));
+					out.putNextEntry(new ZipEntry(name));
 					// Transfer bytes from the ZIP file to the output file
 					int len;
-					while ((len = jin.read(buf)) > 0) {
+					while ((len = zin.read(buf)) > 0) {
 						out.write(buf, 0, len);
 					}
 				}
-				entry = jin.getNextJarEntry();
+				entry = zin.getNextEntry();
 			}
 			// Close the streams
-			jin.close();
+			zin.close();
 			// Compress the files
 			for (int i = 0; i < files.length; i++) {
-				InputStream in = new FileInputStream(files[i]);
+				if (files[i].isDirectory()) {
+					continue;
+				}
+				BufferedInputStream in = new BufferedInputStream(new FileInputStream(files[i].getPath()));
 				// Add ZIP entry to output stream.
-				out.putNextEntry(new JarEntry(files[i].getName()));
+				String entryPath = files[i].getPath().substring(files[i].getPath().indexOf("C:/test/zabal/kufr2/") + "C:/test/zabal/kufr2/".length());
+				System.out.println("entrypath: " + entryPath);
+				out.putNextEntry(new ZipEntry("/trunk" + entryPath));
 				// Transfer bytes from the file to the ZIP file
 				int len;
 				while ((len = in.read(buf)) > 0) {
@@ -205,6 +210,23 @@ public class Archiv {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static File[] seznam(File[] list) {
+		List<File> seznam = new ArrayList<File>();
+		for (File f : list) {
+			seznam.add(f);
+		}
+		for (int i = 0; i < list.length; i++) {
+			if (list[i].isDirectory()) {
+				for (File f2 : seznam(list[i].listFiles())) {
+					seznam.add(f2);
+				}
+			}
+		}
+		File[] ret = new File[seznam.size()];
+		seznam.toArray(ret);
+		return ret;
 	}
 
 }
