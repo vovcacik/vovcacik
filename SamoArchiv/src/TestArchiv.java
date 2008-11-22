@@ -3,7 +3,7 @@ import junit.framework.TestCase;
 public class TestArchiv extends TestCase {
 
 	Archiv archivRozbal;
-	String cestaRozbal = "C:/test/rozbal/archiv.zip";
+	String cestaRozbal = "C:/test/rozbal/archiv.jar";
 	Archiv archivZabal;
 	String cestaZabal = "C:/test/zabal/test.zip";
 
@@ -20,10 +20,10 @@ public class TestArchiv extends TestCase {
 	}
 
 	public void testRozbal() {
-		archivRozbal.rozbal("C:/test/rozbal/");
+		archivRozbal.rozbal("C:/test/rozbal/archiv/");
 	}
 
 	public void testZabal() {
-		archivZabal.zabal("C:/test/zabal/");
+		// archivZabal.zabal("C:/test/zabal/");
 	}
 }

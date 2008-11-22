@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class Archiv {
@@ -21,13 +22,13 @@ public class Archiv {
 		try {
 			BufferedOutputStream dest = null;
 			BufferedInputStream is = null;
-			ZipEntry entry;
-			ZipFile zipfile = new ZipFile(cestaArchiv);
-			Enumeration e = zipfile.entries();
+			JarEntry entry;
+			JarFile jarfile = new JarFile(cestaArchiv);
+			Enumeration e = jarfile.entries();
 			while (e.hasMoreElements()) {
-				entry = (ZipEntry) e.nextElement();
+				entry = (JarEntry) e.nextElement();
 				System.out.println("Extracting: " + entry);
-				is = new BufferedInputStream(zipfile.getInputStream(entry));
+				is = new BufferedInputStream(jarfile.getInputStream(entry));
 				int count;
 				byte data[] = new byte[BUFFER];
 				FileOutputStream fos = new FileOutputStream(cestaRozbal + entry.getName());
