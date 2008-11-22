@@ -20,10 +20,14 @@ public class TestArchiv extends TestCase {
 	}
 
 	public void testRozbal() {
-		archivRozbal.rozbal("C:/test/rozbal/jar/");
+		// archivRozbal.rozbal("C:/test/rozbal/jar/");
 	}
 
 	public void testZabal() {
 		// archivZabal.zabal("C:/test/zabal/");
+	}
+
+	public void testIsPrazdny() {
+		archivRozbal.isPrazdny();
 	}
 }

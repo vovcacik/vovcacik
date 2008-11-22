@@ -3,7 +3,11 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -88,5 +92,47 @@ public class Archiv {
 			e.printStackTrace();
 		}
 
+	}
+
+	public boolean isPrazdny() {
+		URL url = this.getClass().getResource("Archiv.class");
+		System.out.println(url.getPath());
+		String path = url.getPath();
+		path = path.substring(path.indexOf("file:/") + "file:/".length(), path.lastIndexOf('!'));
+
+		System.out.println(path);
+
+		url = this.getClass().getResource("trunk");
+		if (url == null) {
+			System.out.println("return true");
+			return true;
+			// TODO vyhazuj chybu... asi?!
+		}
+		System.out.println(url.getPath());
+
+		JarFile jar;
+		List<JarEntry> entries = new ArrayList<JarEntry>();
+		try {
+			jar = new JarFile(path);
+			Enumeration e = jar.entries();
+			while (e.hasMoreElements()) {
+				JarEntry entry = (JarEntry) e.nextElement();
+				if (entry.getName().startsWith("trunk")) {
+					entries.add(entry);
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		for (JarEntry i : entries) {
+			System.out.println(i.getName());
+		}
+		if (entries.size() == 1) {
+			System.out.println("return true");
+			return true;
+		} else {
+			System.out.println("return false");
+			return false;
+		}
 	}
 }
