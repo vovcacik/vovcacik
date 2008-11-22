@@ -135,21 +135,15 @@ public class Archiv {
 			System.out.println(f.getPath());
 		}
 		// get a temp file
-		File tempFile;
+		File secFile;
 		try {
-			tempFile = File.createTempFile(jarFile.getName(), null);
+			secFile = new File("C:/test/zabal/build2.jar");
+			secFile.createNewFile();
 
-			// delete it, otherwise you cannot rename your existing zip to it.
-			tempFile.delete();
-
-			boolean renameOk = jarFile.renameTo(tempFile);
-			if (!renameOk) {
-				throw new RuntimeException("could not rename the file " + jarFile.getAbsolutePath() + " to " + tempFile.getAbsolutePath());
-			}
 			byte[] buf = new byte[1024];
 
-			ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(tempFile)));
-			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(jarFile)));
+			ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(jarFile)));
+			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(secFile)));
 
 			ZipEntry entry = zin.getNextEntry();
 			while (entry != null) {
@@ -195,7 +189,6 @@ public class Archiv {
 			}
 			// Complete the ZIP file
 			out.close();
-			tempFile.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
