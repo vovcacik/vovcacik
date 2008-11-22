@@ -32,6 +32,6 @@ public class TestArchiv extends TestCase {
 	}
 
 	public void testPribal() {
-		archivZabal.pribal("C:/test/zabal/build.jar", "C:/test/zabal/kufr2/");
+		archivZabal.pribal("C:/test/zabal/novyjar.jar", "C:/test/zabal/kufr2/");
 	}
 }

@@ -8,7 +8,7 @@ public class Start {
 		String cestaRozbal = "C:/test/rozbal/archiv.jar";
 		archivRozbal = new Archiv(cestaRozbal);
 		archivRozbal.isPrazdny();
-
+		archivRozbal.pribal("C:/test/zabal/novyjar.jar", "C:/test/zabal/kufr2/");
 	}
 
 }

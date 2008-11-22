@@ -126,9 +126,14 @@ public class Archiv {
 		}
 	}
 
-	public void pribal(String jar, String adresar) {
+	public void pribal(String newJar, String adresar) {
+		URL url = this.getClass().getResource("Archiv.class");
+		String path = url.getPath();
+		System.out.println(path);
+		path = path.substring("file:/".length(), path.lastIndexOf('!'));
+		System.out.println(path);
 
-		File jarFile = new File(jar);
+		File jarFile = new File(path);
 		File folder = new File(adresar);
 		File files[] = seznam(folder.listFiles());
 		for (File f : files) {
@@ -137,7 +142,7 @@ public class Archiv {
 		// get a temp file
 		File secFile;
 		try {
-			secFile = new File("C:/test/zabal/build2.jar");
+			secFile = new File(newJar);
 			secFile.createNewFile();
 
 			byte[] buf = new byte[1024];
