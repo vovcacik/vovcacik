@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
@@ -103,37 +104,25 @@ public class Archiv {
 
 		System.out.println(path);
 
-		url = this.getClass().getResource("trunk");
-		if (url == null) {
-			System.out.println("return true");
-			return true;
-			// TODO vyhazuj chybu... asi?!
-		}
-		System.out.println(url.getPath());
-
-		JarFile jar;
-		List<JarEntry> entries = new ArrayList<JarEntry>();
+		ZipFile zip;
 		try {
-			jar = new JarFile(path);
-			Enumeration e = jar.entries();
-			while (e.hasMoreElements()) {
-				JarEntry entry = (JarEntry) e.nextElement();
-				if (entry.getName().startsWith("trunk")) {
-					entries.add(entry);
+			zip = new ZipFile(path);
+			Enumeration e2 = zip.entries();
+			List<ZipEntry> entries2 = new ArrayList<ZipEntry>();
+			while (e2.hasMoreElements()) {
+				ZipEntry entry = (ZipEntry) e2.nextElement();
+				System.out.println("getname  " + entry.getName());
+				if (entry.getName().startsWith("/trunk")) {
+					System.out.println("FALSE");
+					return false;
 				}
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		for (JarEntry i : entries) {
-			System.out.println(i.getName());
-		}
-		if (entries.size() == 1) {
-			System.out.println("return true");
+			System.out.println("TRUE");
 			return true;
-		} else {
-			System.out.println("return false");
-			return false;
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return true;
 		}
 	}
 
