@@ -25,8 +25,21 @@ public class Archiv {
 			JarEntry entry;
 			JarFile jarfile = new JarFile(cestaArchiv);
 			Enumeration e = jarfile.entries();
+
 			while (e.hasMoreElements()) {
 				entry = (JarEntry) e.nextElement();
+
+				int iLomitka;
+				if ((iLomitka = entry.getName().lastIndexOf('/')) != -1) {
+					// Assume directories are stored parents first then
+					// children.
+					String dir = entry.getName().substring(0, iLomitka);
+					System.out.println("Extracting directory: " + cestaRozbal + dir);
+					// This is not robust, just for demonstration purposes.
+					(new File(cestaRozbal + dir)).mkdir();
+
+				}
+
 				System.out.println("Extracting: " + entry);
 				is = new BufferedInputStream(jarfile.getInputStream(entry));
 				int count;

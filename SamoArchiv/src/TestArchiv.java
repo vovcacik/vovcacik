@@ -20,7 +20,7 @@ public class TestArchiv extends TestCase {
 	}
 
 	public void testRozbal() {
-		archivRozbal.rozbal("C:/test/rozbal/archiv/");
+		archivRozbal.rozbal("C:/test/rozbal/jar/");
 	}
 
 	public void testZabal() {
