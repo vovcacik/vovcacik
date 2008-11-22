@@ -23,15 +23,16 @@ public class Start {
 				System.out.println(f.getPath());
 			}
 			for (int i = 0; i < files.length; i++) {
-				if (files[i].isFile()) {
-					in = new BufferedInputStream(new FileInputStream(files[i].getPath()), 1000);
+				if (files[i].isDirectory()) {
+					continue;
 				}
-				out.putNextEntry(new ZipEntry(files[i].getPath()));
-				if (files[i].isFile()) {
-					int count;
-					while ((count = in.read(data, 0, 1000)) != -1) {
-						out.write(data, 0, count);
-					}
+				in = new BufferedInputStream(new FileInputStream(files[i].getPath()), 1000);
+				String entryPath = files[i].getPath().substring(files[i].getPath().indexOf("C:/test/zabal/kufr2/") + "C:/test/zabal/kufr2/".length());
+				System.out.println(entryPath);
+				out.putNextEntry(new ZipEntry(entryPath));
+				int count;
+				while ((count = in.read(data, 0, 1000)) != -1) {
+					out.write(data, 0, count);
 				}
 				out.closeEntry();
 			}
