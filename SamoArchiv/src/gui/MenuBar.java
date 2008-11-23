@@ -28,7 +28,11 @@ public class MenuBar extends JMenuBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Nový archiv")) {
-
+				OknoZabal oknoZabal = new OknoZabal();
+				oknoZabal.setVisible(true);
+				// Archiv archiv = new Archiv();
+				// archiv.zabal("C:/test/zabal/guiNewjar.jar",
+				// "C:/test/zabal/kufr2/");
 			} else if (e.getActionCommand().equals("Rozbal archiv")) {
 
 			} else if (e.getActionCommand().equals("Konec")) {

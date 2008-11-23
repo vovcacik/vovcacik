@@ -64,11 +64,7 @@ public class Archiv {
 	}
 
 	public boolean isPrazdny() {
-		URL url = this.getClass().getResource("Archiv.class");
-		System.out.println(url.getPath());
-		String path = url.getPath();
-		path = path.substring(path.indexOf("file:/") + "file:/".length(), path.lastIndexOf('!'));
-
+		String path = getThisPath();
 		System.out.println(path);
 
 		ZipFile zip;
@@ -90,6 +86,13 @@ public class Archiv {
 			e1.printStackTrace();
 			return true;
 		}
+	}
+
+	public String getThisPath() {
+		URL url = this.getClass().getResource("Archiv.class");
+		String path = url.getPath();
+		path = path.substring(path.indexOf("file:/") + "file:/".length(), path.lastIndexOf('!'));
+		return path;
 	}
 
 	public void zabal(String newJar, String adresar) {
