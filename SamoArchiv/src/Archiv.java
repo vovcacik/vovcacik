@@ -18,7 +18,7 @@ public class Archiv {
 	public Archiv() {
 	}
 
-	void rozbal(String cestaRozbal) {
+	void rozbal(String zdrojovyJar, String cestaRozbal) {
 		final int BUFFER = 2048;
 		try {
 			File adresarRozbalit = new File(cestaRozbal);
@@ -26,7 +26,7 @@ public class Archiv {
 			BufferedOutputStream dest = null;
 			BufferedInputStream is = null;
 			ZipEntry entry;
-			ZipFile zipFile = new ZipFile("C:/test/zabal/novyjar.jar");
+			ZipFile zipFile = new ZipFile(zdrojovyJar);
 			Enumeration e = zipFile.entries();
 
 			while (e.hasMoreElements()) {
@@ -142,7 +142,7 @@ public class Archiv {
 				}
 				BufferedInputStream in = new BufferedInputStream(new FileInputStream(files[i].getPath()));
 				// Add ZIP entry to output stream.
-				String entryPath = files[i].getPath().substring(files[i].getPath().indexOf("C:/test/zabal/kufr/") + "C:/test/zabal/kufr/".length());
+				String entryPath = files[i].getPath().substring(files[i].getPath().indexOf(adresar) + adresar.length());
 				System.out.println("entrypath: " + entryPath);
 				out.putNextEntry(new ZipEntry("/trunk" + entryPath));
 				// Transfer bytes from the file to the ZIP file
