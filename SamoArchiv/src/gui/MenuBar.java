@@ -30,11 +30,9 @@ public class MenuBar extends JMenuBar {
 			if (e.getActionCommand().equals("Nový archiv")) {
 				OknoZabal oknoZabal = new OknoZabal();
 				oknoZabal.setVisible(true);
-				// Archiv archiv = new Archiv();
-				// archiv.zabal("C:/test/zabal/guiNewjar.jar",
-				// "C:/test/zabal/kufr2/");
 			} else if (e.getActionCommand().equals("Rozbal archiv")) {
-
+				OknoRozbal oknoRozbal = new OknoRozbal();
+				oknoRozbal.setVisible(true);
 			} else if (e.getActionCommand().equals("Konec")) {
 				System.exit(0);
 			} else {

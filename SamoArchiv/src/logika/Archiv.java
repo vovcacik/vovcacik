@@ -20,7 +20,7 @@ public class Archiv {
 	public Archiv() {
 	}
 
-	void rozbal(String pathZdrojJar, String pathCilDir) {
+	public void rozbal(String pathZdrojJar, String pathCilDir) {
 		pathZdrojJar = pathZdrojJar.replace('\\', '/');
 		pathCilDir = pathCilDir.replace('\\', '/');
 		final int BUFFER = 2048;
