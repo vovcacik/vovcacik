@@ -1,3 +1,5 @@
+package logika;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -18,35 +20,35 @@ public class Archiv {
 	public Archiv() {
 	}
 
-	void rozbal(String zdrojovyJar, String cestaRozbal) {
-		zdrojovyJar = zdrojovyJar.replace('\\', '/');
-		cestaRozbal = cestaRozbal.replace('\\', '/');
+	void rozbal(String pathZdrojJar, String pathCilDir) {
+		pathZdrojJar = pathZdrojJar.replace('\\', '/');
+		pathCilDir = pathCilDir.replace('\\', '/');
 		final int BUFFER = 2048;
 		try {
-			File adresarRozbalit = new File(cestaRozbal);
-			adresarRozbalit.mkdirs();
+			File cilDir = new File(pathCilDir);
+			cilDir.mkdirs();
 			BufferedOutputStream dest = null;
 			BufferedInputStream is = null;
 			ZipEntry entry;
-			ZipFile zipFile = new ZipFile(zdrojovyJar);
-			Enumeration e = zipFile.entries();
+			ZipFile zdrojJar = new ZipFile(pathZdrojJar);
+			Enumeration entries = zdrojJar.entries();
 
-			while (e.hasMoreElements()) {
-				entry = (ZipEntry) e.nextElement();
+			while (entries.hasMoreElements()) {
+				entry = (ZipEntry) entries.nextElement();
 
 				int iLomitka;
 				String jmeno = entry.getName().replace('\\', '/');
 				if ((iLomitka = jmeno.lastIndexOf('/')) != -1) {
 					String dir = entry.getName().substring(0, iLomitka);
-					System.out.println("Extracting directory: " + cestaRozbal + dir);
-					(new File(cestaRozbal + dir)).mkdirs();
+					System.out.println("Extracting directory: " + pathCilDir + dir);
+					(new File(pathCilDir + dir)).mkdirs();
 				}
 
 				System.out.println("Extracting: " + entry);
-				is = new BufferedInputStream(zipFile.getInputStream(entry));
+				is = new BufferedInputStream(zdrojJar.getInputStream(entry));
 				int count;
 				byte data[] = new byte[BUFFER];
-				FileOutputStream fos = new FileOutputStream(cestaRozbal + entry.getName());
+				FileOutputStream fos = new FileOutputStream(pathCilDir + entry.getName());
 				dest = new BufferedOutputStream(fos, BUFFER);
 				while ((count = is.read(data, 0, BUFFER)) != -1) {
 					dest.write(data, 0, count);
@@ -105,7 +107,7 @@ public class Archiv {
 		for (File f : files) {
 			System.out.println(f.getPath());
 		}
-		// get a temp file
+
 		File secFile;
 		try {
 			secFile = new File(newJar);

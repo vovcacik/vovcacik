@@ -1,9 +1,16 @@
+package logika;
+
+import gui.HlavniOkno;
+
 public class Start {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		HlavniOkno hlOkno = new HlavniOkno();
+		hlOkno.setVisible(true);
+
 		Archiv archiv;
 		archiv = new Archiv();
 		for (String s : args) {

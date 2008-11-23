@@ -1,3 +1,5 @@
+package logika;
+
 import junit.framework.TestCase;
 
 public class TestArchiv extends TestCase {
