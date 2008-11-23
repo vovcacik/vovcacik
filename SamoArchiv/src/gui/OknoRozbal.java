@@ -2,13 +2,14 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import logika.Archiv;
@@ -21,7 +22,9 @@ import logika.Archiv;
 public class OknoRozbal {
 
 	private JFrame okno;
-	private JPanel panel;
+	private JPanel panelAdresar;
+	private JPanel panelHotovo;
+	private JLabel labelAdresar;
 	private JTextField pathAdresar;
 	private JButton buttonAdresar;
 	private JButton buttonHotovo;
@@ -63,20 +66,28 @@ public class OknoRozbal {
 		okno.setTitle("Okno rozbal");
 		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+		labelAdresar = new JLabel("Vyberte složku pro archivaci:");
 		pathAdresar = new JTextField(30);
 		buttonAdresar = new JButton("Vyber adresář");
 		buttonAdresar.addActionListener(new ButtonAdresarListener());
 		buttonHotovo = new JButton("Rozbal...");
 		buttonHotovo.addActionListener(new ButtonHotovoListener());
 
-		panel = new JPanel();
-		panel.setLayout(new GridLayout(2, 2));
-		panel.add(pathAdresar);
-		panel.add(buttonAdresar);
-		panel.add(buttonHotovo);
+		panelAdresar = new JPanel();
+		panelAdresar.setLayout(new FlowLayout());
+		panelAdresar.add(labelAdresar);
+		panelAdresar.add(pathAdresar);
+		panelAdresar.add(buttonAdresar);
 
-		okno.add(panel, BorderLayout.CENTER);
-		okno.setMinimumSize(new Dimension(340, 250));
+		panelHotovo = new JPanel();
+		FlowLayout mng = new FlowLayout();
+		mng.setAlignment(FlowLayout.RIGHT);
+		panelHotovo.setLayout(mng);
+		panelHotovo.add(buttonHotovo);
+
+		okno.add(panelAdresar, BorderLayout.CENTER);
+		okno.add(panelHotovo, BorderLayout.SOUTH);
+		okno.setMinimumSize(new Dimension(100, 50));
 		okno.pack();
 		okno.setLocationRelativeTo(null);
 

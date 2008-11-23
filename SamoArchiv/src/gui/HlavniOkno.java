@@ -1,22 +1,17 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
+import logika.Archiv;
 
 public class HlavniOkno {
 	private JFrame okno;
 	private MenuBar menu;
-	private JPanel jizniPanel;
-	private JPanel vychodniPanel;
-	private JTextField vstup;
 	private JTextArea vystup;
 	private JScrollPane scroll;
+	private String oddelovac = "\n-------------------------------------------------------------";
 
 	public HlavniOkno() {
 		okno = new JFrame();
@@ -26,23 +21,20 @@ public class HlavniOkno {
 		menu = new MenuBar();
 		okno.setJMenuBar(menu);
 
-		vystup = new JTextArea(20, 40);
-		vystup.setText("neco");
+		vystup = new JTextArea(2, 20);
+		Archiv archiv = new Archiv();
+		if (archiv.isPrazdny()) {
+			vystup.setText("Archiv je prázdný." + oddelovac);
+		} else {
+			vystup.setText("Aktuální archiv: " + archiv.getThisPath() + oddelovac);
+		}
 		vystup.setEditable(false);
 
 		scroll = new JScrollPane(vystup);
 		okno.add(scroll);
 		vystup.setCaretPosition(vystup.getDocument().getLength());
 
-		vstup = new JTextField(30);
-		vstup.addActionListener(null);
-
-		jizniPanel = new JPanel();
-		jizniPanel.add(new JLabel("Zadej prikaz"));
-		jizniPanel.add(vstup);
-
-		okno.add(jizniPanel, BorderLayout.SOUTH);
-		okno.setMinimumSize(new Dimension(680, 500));
+		okno.setPreferredSize(new Dimension(280, 150));
 		okno.pack();
 		okno.setLocationRelativeTo(null);
 

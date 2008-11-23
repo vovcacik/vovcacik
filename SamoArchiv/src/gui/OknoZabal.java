@@ -2,13 +2,14 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import logika.Archiv;
@@ -21,12 +22,16 @@ import logika.Archiv;
 public class OknoZabal {
 
 	private JFrame okno;
-	private JPanel panel;
+	private JPanel panelJar;
+	private JPanel panelAdresar;
+	private JLabel labelJar;
 	private JTextField pathJar;
 	private JButton buttonJar;
+	private JLabel labelAdresar;
 	private JTextField pathAdresar;
 	private JButton buttonAdresar;
 	private JButton buttonHotovo;
+	private JPanel panelHotovo;
 
 	private class ButtonJarListener implements ActionListener {
 		@Override
@@ -84,25 +89,40 @@ public class OknoZabal {
 		okno.setTitle("Okno zabal");
 		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+		labelJar = new JLabel("Vyberte cestu a název nového archivu:");
 		pathJar = new JTextField(30);
 		buttonJar = new JButton("Vyber jar");
 		buttonJar.addActionListener(new ButtonJarListener());
+
+		labelAdresar = new JLabel("Vyberte složku pro extrakci:");
 		pathAdresar = new JTextField(30);
 		buttonAdresar = new JButton("Vyber adresář");
 		buttonAdresar.addActionListener(new ButtonAdresarListener());
 		buttonHotovo = new JButton("Vytvoř...");
 		buttonHotovo.addActionListener(new ButtonHotovoListener());
 
-		panel = new JPanel();
-		panel.setLayout(new GridLayout(3, 2));
-		panel.add(pathJar);
-		panel.add(buttonJar);
-		panel.add(pathAdresar);
-		panel.add(buttonAdresar);
-		panel.add(buttonHotovo);
+		panelJar = new JPanel();
+		panelJar.setLayout(new FlowLayout());
+		panelJar.add(labelJar);
+		panelJar.add(pathJar);
+		panelJar.add(buttonJar);
 
-		okno.add(panel, BorderLayout.CENTER);
-		okno.setMinimumSize(new Dimension(340, 250));
+		panelAdresar = new JPanel();
+		panelAdresar.setLayout(new FlowLayout());
+		panelAdresar.add(labelAdresar);
+		panelAdresar.add(pathAdresar);
+		panelAdresar.add(buttonAdresar);
+
+		panelHotovo = new JPanel();
+		FlowLayout mng = new FlowLayout();
+		mng.setAlignment(FlowLayout.RIGHT);
+		panelHotovo.setLayout(mng);
+		panelHotovo.add(buttonHotovo);
+
+		okno.add(panelJar, BorderLayout.NORTH);
+		okno.add(panelAdresar, BorderLayout.CENTER);
+		okno.add(panelHotovo, BorderLayout.SOUTH);
+		okno.setMinimumSize(new Dimension(100, 50));
 		okno.pack();
 		okno.setLocationRelativeTo(null);
 

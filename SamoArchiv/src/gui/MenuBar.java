@@ -34,7 +34,7 @@ public class MenuBar extends JMenuBar {
 				oknoZabal.setVisible(true);
 			} else if (e.getActionCommand().equals("Rozbal archiv")) {
 				if (new Archiv().isPrazdny()) {
-					JOptionPane.showMessageDialog(null, "Archiv je prázdný, nelze rozbalit...", "Chyba", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Archiv je prázdný, nelzerozbalit...", "Chyba", JOptionPane.ERROR_MESSAGE);
 				} else {
 					OknoRozbal oknoRozbal = new OknoRozbal();
 					oknoRozbal.setVisible(true);
@@ -45,7 +45,6 @@ public class MenuBar extends JMenuBar {
 				System.out.println("Neznama volba menu!");
 			}
 		}
-
 	}
 
 	/**
