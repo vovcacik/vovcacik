@@ -15,7 +15,7 @@ public class HlavniOkno {
 
 	public HlavniOkno() {
 		okno = new JFrame();
-		okno.setTitle("Adventura");
+		okno.setTitle("Samorozbalovací archiv");
 		okno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		menu = new MenuBar();
@@ -24,9 +24,9 @@ public class HlavniOkno {
 		vystup = new JTextArea(2, 20);
 		Archiv archiv = new Archiv();
 		if (archiv.isPrazdny()) {
-			vystup.setText("Archiv je prázdný." + oddelovac);
+			vystup.setText("Archiv " + archiv.getThisPath() + " je prázdný." + oddelovac);
 		} else {
-			vystup.setText("Aktuální archiv: " + archiv.getThisPath() + oddelovac);
+			vystup.setText("Aktuální archiv: " + archiv.getThisPath() + " obsahuje archivované soubory." + oddelovac);
 		}
 		vystup.setEditable(false);
 

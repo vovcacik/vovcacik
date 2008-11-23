@@ -86,17 +86,17 @@ public class OknoZabal {
 	 */
 	public OknoZabal() {
 		okno = new JFrame();
-		okno.setTitle("Okno zabal");
+		okno.setTitle("Komprimovat...");
 		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		labelJar = new JLabel("Vyberte cestu a název nového archivu:");
 		pathJar = new JTextField(30);
-		buttonJar = new JButton("Vyber jar");
+		buttonJar = new JButton("Procházet");
 		buttonJar.addActionListener(new ButtonJarListener());
 
 		labelAdresar = new JLabel("Vyberte složku pro extrakci:");
 		pathAdresar = new JTextField(30);
-		buttonAdresar = new JButton("Vyber adresář");
+		buttonAdresar = new JButton("Procházet");
 		buttonAdresar.addActionListener(new ButtonAdresarListener());
 		buttonHotovo = new JButton("Vytvoř...");
 		buttonHotovo.addActionListener(new ButtonHotovoListener());

@@ -63,12 +63,12 @@ public class OknoRozbal {
 	 */
 	public OknoRozbal() {
 		okno = new JFrame();
-		okno.setTitle("Okno rozbal");
+		okno.setTitle("Extrahovat...");
 		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		labelAdresar = new JLabel("Vyberte složku pro archivaci:");
 		pathAdresar = new JTextField(30);
-		buttonAdresar = new JButton("Vyber adresář");
+		buttonAdresar = new JButton("Procházet");
 		buttonAdresar.addActionListener(new ButtonAdresarListener());
 		buttonHotovo = new JButton("Rozbal...");
 		buttonHotovo.addActionListener(new ButtonHotovoListener());

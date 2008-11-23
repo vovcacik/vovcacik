@@ -34,7 +34,7 @@ public class MenuBar extends JMenuBar {
 				oknoZabal.setVisible(true);
 			} else if (e.getActionCommand().equals("Rozbal archiv")) {
 				if (new Archiv().isPrazdny()) {
-					JOptionPane.showMessageDialog(null, "Archiv je prázdný, nelzerozbalit...", "Chyba", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Archiv je prázdný, nelze rozbalit...", "Chyba", JOptionPane.ERROR_MESSAGE);
 				} else {
 					OknoRozbal oknoRozbal = new OknoRozbal();
 					oknoRozbal.setVisible(true);
@@ -42,7 +42,7 @@ public class MenuBar extends JMenuBar {
 			} else if (e.getActionCommand().equals("Konec")) {
 				System.exit(0);
 			} else {
-				System.out.println("Neznama volba menu!");
+				System.out.println("Neznamá volba menu!");
 			}
 		}
 	}
@@ -74,17 +74,5 @@ public class MenuBar extends JMenuBar {
 		menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
 		menuItem.addActionListener(ovladac);
 		menu.add(menuItem);
-
-		// Druhé menu s napovedou
-		// menu = new JMenu("Pomoc");
-		// menu.setMnemonic(KeyEvent.VK_P);
-		// this.add(menu);
-		//		
-		// menuItem = new JMenuItem("Příručka", KeyEvent.VK_P);
-		// menuItem.addActionListener(ovladac);
-		// menu.add(menuItem);
-		// menuItem = new JMenuItem("O programu", KeyEvent.VK_O);
-		// menuItem.addActionListener(ovladac);
-		// menu.add(menuItem);
 	}
 }
