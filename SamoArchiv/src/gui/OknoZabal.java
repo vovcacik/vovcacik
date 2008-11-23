@@ -115,13 +115,4 @@ public class OknoZabal {
 	public void setVisible(boolean visible) {
 		okno.setVisible(visible);
 	}
-
-	/**
-	 * Odesila prikaz do logiky hry, zaroven tiskne prikaz do gui a tiskne i
-	 * odpoved logiky na prikaz. Vraci epilog.
-	 * @param prikaz prikaz ke zpracovani
-	 */
-	public void odesliPrikaz(String prikaz) {
-		return;
-	}
 }

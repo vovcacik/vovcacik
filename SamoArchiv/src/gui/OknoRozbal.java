@@ -84,8 +84,4 @@ public class OknoRozbal {
 	public void setVisible(boolean visible) {
 		okno.setVisible(visible);
 	}
-
-	public void odesliPrikaz(String prikaz) {
-		return;
-	}
 }
