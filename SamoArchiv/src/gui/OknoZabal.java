@@ -94,7 +94,7 @@ public class OknoZabal {
 		buttonJar = new JButton("Procházet");
 		buttonJar.addActionListener(new ButtonJarListener());
 
-		labelAdresar = new JLabel("Vyberte složku pro extrakci:");
+		labelAdresar = new JLabel("Vyberte složku pro archivaci:");
 		pathAdresar = new JTextField(30);
 		buttonAdresar = new JButton("Procházet");
 		buttonAdresar.addActionListener(new ButtonAdresarListener());

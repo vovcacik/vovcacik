@@ -66,7 +66,7 @@ public class OknoRozbal {
 		okno.setTitle("Extrahovat...");
 		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-		labelAdresar = new JLabel("Vyberte složku pro archivaci:");
+		labelAdresar = new JLabel("Vyberte složku pro extrakci:");
 		pathAdresar = new JTextField(30);
 		buttonAdresar = new JButton("Procházet");
 		buttonAdresar.addActionListener(new ButtonAdresarListener());
