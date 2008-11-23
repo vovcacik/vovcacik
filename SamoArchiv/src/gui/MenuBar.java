@@ -7,7 +7,9 @@ import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
+import logika.Archiv;
 
 /**
  * Vlastni komponenta menu. Vytvari okno s napovedou a okno O programu.
@@ -31,8 +33,12 @@ public class MenuBar extends JMenuBar {
 				OknoZabal oknoZabal = new OknoZabal();
 				oknoZabal.setVisible(true);
 			} else if (e.getActionCommand().equals("Rozbal archiv")) {
-				OknoRozbal oknoRozbal = new OknoRozbal();
-				oknoRozbal.setVisible(true);
+				if (new Archiv().isPrazdny()) {
+					JOptionPane.showMessageDialog(null, "Archiv je prázdný, nelze rozbalit...", "Chyba", JOptionPane.ERROR_MESSAGE);
+				} else {
+					OknoRozbal oknoRozbal = new OknoRozbal();
+					oknoRozbal.setVisible(true);
+				}
 			} else if (e.getActionCommand().equals("Konec")) {
 				System.exit(0);
 			} else {
