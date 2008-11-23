@@ -35,11 +35,14 @@ public class Archiv {
 
 			while (entries.hasMoreElements()) {
 				entry = (ZipEntry) entries.nextElement();
-
+				System.out.println("ENTRY: " + entry.getName());
+				if (!entry.getName().startsWith("/trunk")) {
+					continue;
+				}
 				int iLomitka;
 				String jmeno = entry.getName().replace('\\', '/');
 				if ((iLomitka = jmeno.lastIndexOf('/')) != -1) {
-					String dir = entry.getName().substring(0, iLomitka);
+					String dir = entry.getName().substring("/trunk".length(), iLomitka);
 					System.out.println("Extracting directory: " + pathCilDir + dir);
 					(new File(pathCilDir + dir)).mkdirs();
 				}
@@ -48,7 +51,7 @@ public class Archiv {
 				is = new BufferedInputStream(zdrojJar.getInputStream(entry));
 				int count;
 				byte data[] = new byte[BUFFER];
-				FileOutputStream fos = new FileOutputStream(pathCilDir + entry.getName());
+				FileOutputStream fos = new FileOutputStream(pathCilDir + entry.getName().substring("/trunk".length()));
 				dest = new BufferedOutputStream(fos, BUFFER);
 				while ((count = is.read(data, 0, BUFFER)) != -1) {
 					dest.write(data, 0, count);
