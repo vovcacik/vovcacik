@@ -27,7 +27,6 @@ public class TestArchiv extends TestCase {
 	}
 
 	public void testZabal() {
-		// archivZabal.zabal("C:/test/zabal/novyjar.jar",
-		// "C:/test/zabal/kufr2/");
+		// archivZabal.zabal("C:/test/zabal/novyjar.jar","C:/test/zabal/kufr/");
 	}
 }

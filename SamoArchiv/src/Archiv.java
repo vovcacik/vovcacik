@@ -19,6 +19,8 @@ public class Archiv {
 	}
 
 	void rozbal(String zdrojovyJar, String cestaRozbal) {
+		zdrojovyJar = zdrojovyJar.replace('\\', '/');
+		cestaRozbal = cestaRozbal.replace('\\', '/');
 		final int BUFFER = 2048;
 		try {
 			File adresarRozbalit = new File(cestaRozbal);
@@ -89,6 +91,8 @@ public class Archiv {
 	}
 
 	public void zabal(String newJar, String adresar) {
+		newJar = newJar.replace('\\', '/');
+		adresar = adresar.replace('\\', '/');
 		URL url = this.getClass().getResource("Archiv.class");
 		String path = url.getPath();
 		System.out.println("url path " + path);
@@ -117,7 +121,8 @@ public class Archiv {
 				String name = entry.getName();
 				boolean notInFiles = true;
 				for (File f : files) {
-					if (f.getName().equals(name)) {
+					String fname = f.getName();
+					if (fname.equals(name)) {
 						notInFiles = false;
 						break;
 					}

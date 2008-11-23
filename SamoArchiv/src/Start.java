@@ -6,10 +6,15 @@ public class Start {
 	public static void main(String[] args) {
 		Archiv archiv;
 		archiv = new Archiv();
-		if (archiv.isPrazdny()) {
-			archiv.zabal("C:/test/zabal/novyjar.jar", "C:/test/zabal/kufr/");
+		for (String s : args) {
+			System.out.println(s);
+		}
+		if (args[0].equals("-z")) {
+			archiv.zabal(args[1], args[2]);
+		} else if (args[0].equals("-r")) {
+			archiv.rozbal(args[1], args[2]);
 		} else {
-			archiv.rozbal("C:/test/zabal/novyjar.jar", "C:/test/zabal/novyKufr/");
+			System.err.println("zadny argument...");
 		}
 	}
 }
