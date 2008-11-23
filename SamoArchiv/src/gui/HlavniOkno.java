@@ -34,7 +34,7 @@ public class HlavniOkno {
 		okno.add(scroll);
 		vystup.setCaretPosition(vystup.getDocument().getLength());
 
-		okno.setPreferredSize(new Dimension(280, 150));
+		okno.setPreferredSize(new Dimension(400, 250));
 		okno.pack();
 		okno.setLocationRelativeTo(null);
 

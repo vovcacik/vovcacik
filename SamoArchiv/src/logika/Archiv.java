@@ -97,17 +97,14 @@ public class Archiv {
 		URL url = this.getClass().getResource("Archiv.class");
 		String path = url.getPath();
 		path = path.substring(path.indexOf("file:/") + "file:/".length(), path.lastIndexOf('!'));
-		return path;
+		return path.replaceAll("%20", " ");
 	}
 
 	public void zabal(String newJar, String adresar) {
 		newJar = newJar.replace('\\', '/');
 		adresar = adresar.replace('\\', '/');
 		URL url = this.getClass().getResource("Archiv.class");
-		String path = url.getPath();
-		System.out.println("url path " + path);
-		path = path.substring("file:/".length(), path.lastIndexOf('!'));
-		System.out.println("zkracena path " + path);
+		String path = this.getThisPath();
 
 		File jarFile = new File(path);
 		File folder = new File(adresar);
