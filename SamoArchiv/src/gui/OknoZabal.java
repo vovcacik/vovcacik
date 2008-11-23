@@ -33,6 +33,7 @@ public class OknoZabal {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fc.setCurrentDirectory(new File(new Archiv().getThisPath()));
 			int returnVal = fc.showSaveDialog(okno);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
@@ -50,6 +51,7 @@ public class OknoZabal {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			fc.setCurrentDirectory(new File(new Archiv().getThisPath()));
 			int returnVal = fc.showSaveDialog(okno);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
