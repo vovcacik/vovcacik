@@ -24,9 +24,9 @@ public class HlavniOkno {
 		vystup = new JTextArea(2, 20);
 		Archiv archiv = new Archiv();
 		if (archiv.isPrazdny()) {
-			vystup.setText("Archiv " + archiv.getThisPath() + " je prázdný." + oddelovac);
+			vystup.setText("Archiv " + archiv.getRootPath() + " je prázdný." + oddelovac);
 		} else {
-			vystup.setText("Aktuální archiv: " + archiv.getThisPath() + " obsahuje archivované soubory." + oddelovac);
+			vystup.setText("Aktuální archiv: " + archiv.getRootPath() + " obsahuje archivované soubory." + oddelovac);
 		}
 		vystup.setEditable(false);
 

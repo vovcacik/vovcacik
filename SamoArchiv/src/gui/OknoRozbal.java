@@ -33,7 +33,7 @@ public class OknoRozbal {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fc.setCurrentDirectory(new File(new Archiv().getThisPath()));
+			fc.setCurrentDirectory(new File(new Archiv().getRootPath()));
 			int returnVal = fc.showSaveDialog(okno);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
@@ -51,7 +51,7 @@ public class OknoRozbal {
 			if (!(pAdresar.endsWith("/") || pAdresar.endsWith("\\"))) {
 				pAdresar += "/";
 			}
-			archiv.rozbal(archiv.getThisPath(), pAdresar);
+			archiv.rozbal(pAdresar);
 			okno.dispose();
 
 		}
