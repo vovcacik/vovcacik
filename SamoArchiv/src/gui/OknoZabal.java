@@ -15,24 +15,34 @@ import javax.swing.JTextField;
 import logika.Archiv;
 
 /**
- * Třída HlavníOkno je hlavním oknem GUI adventury. Inicializuje logiku a
- * všechny grafické prvky. Také odesílá příkazy do logiky.
- * @author Vlasta
+ * Tato třída zobrazuje grafiku při archivaci.
+ * @author Vlastimil Ovčáčík
+ *
  */
 public class OknoZabal {
 
 	private JFrame okno;
+	//J komponenty patřící k nově vytvářenému archivu jar
 	private JPanel panelJar;
-	private JPanel panelAdresar;
 	private JLabel labelJar;
 	private JTextField pathJar;
 	private JButton buttonJar;
+
+	//J komponenty patřící ke zdrojovému adresáři
+	private JPanel panelAdresar;
 	private JLabel labelAdresar;
 	private JTextField pathAdresar;
 	private JButton buttonAdresar;
+
+	//Tlačítko "Zabal"
 	private JButton buttonHotovo;
 	private JPanel panelHotovo;
 
+	/**
+	 * Otevírá JFileChooser pro výběr umístění nového archivu jar.
+	 * @author Vlastimil Ovčáčík
+	 *
+	 */
 	private class ButtonJarListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -44,13 +54,14 @@ public class OknoZabal {
 				File file = fc.getSelectedFile();
 				pathJar.setText(file.getPath());
 			}
-
 		}
 	}
 
 	/**
-	 * Tato třída poskytuje odeslání příkazu z vstupního řádku
-	 * @author Vlasta
+	 * Otevírá JFileChooser pro výběr zdrojové složky (složky s archivovanými
+	 * soubory)
+	 * @author Vlastimil Ovčáčík
+	 *
 	 */
 	private class ButtonAdresarListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -65,8 +76,12 @@ public class OknoZabal {
 		}
 	}
 
+	/**
+	 * Spouští se při stisku tlačítka "Zabal". Spouští samotnou archivaci.
+	 * @author Vlastimil Ovčáčík
+	 *
+	 */
 	private class ButtonHotovoListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			Archiv archiv = new Archiv();
@@ -82,7 +97,7 @@ public class OknoZabal {
 	}
 
 	/**
-	 * Konstruktor vytvoří logiku hry a gui.
+	 * Konstruktor samotného okna.
 	 */
 	public OknoZabal() {
 		okno = new JFrame();
@@ -132,10 +147,6 @@ public class OknoZabal {
 
 	}
 
-	/**
-	 * Zviditelnuje dve hlavni okno - Hlavni okno a okno s Mapou
-	 * @param visible hodnota true zviditelni okna
-	 */
 	public void setVisible(boolean visible) {
 		okno.setVisible(visible);
 	}

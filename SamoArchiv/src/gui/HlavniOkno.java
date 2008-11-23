@@ -6,6 +6,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import logika.Archiv;
 
+/**
+ * Hlavní okno aplikace. Obsahuje textové pole a JMenuBar
+ * @author Vlastimil Ovčáčík
+ *
+ */
 public class HlavniOkno {
 	private JFrame okno;
 	private MenuBar menu;

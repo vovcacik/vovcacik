@@ -15,9 +15,8 @@ import javax.swing.JTextField;
 import logika.Archiv;
 
 /**
- * Třída HlavníOkno je hlavním oknem GUI adventury. Inicializuje logiku a
- * všechny grafické prvky. Také odesílá příkazy do logiky.
- * @author Vlasta
+ * Toto okno obsahuje grafiku zobrazeno při rozbalování archivu.
+ * @author Vlastimil Ovčáčík
  */
 public class OknoRozbal {
 
@@ -29,6 +28,11 @@ public class OknoRozbal {
 	private JButton buttonAdresar;
 	private JButton buttonHotovo;
 
+	/**
+	 * Zobrazí JFileChooser při stisku tlačítka "Procházet" (buttonAdresar)
+	 * @author Vlastimil Ovčáčík
+	 *
+	 */
 	private class ButtonAdresarListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
@@ -42,6 +46,11 @@ public class OknoRozbal {
 		}
 	}
 
+	/**
+	 * Spouští samotné rozbalování po stisku tlačítka "Extrahovat..." (buttonHotovo)
+	 * @author Vlastimil Ovčáčík
+	 *
+	 */
 	private class ButtonHotovoListener implements ActionListener {
 
 		@Override
@@ -59,7 +68,7 @@ public class OknoRozbal {
 	}
 
 	/**
-	 * Konstruktor vytvoří logiku hry a gui.
+	 * Konstruktor.
 	 */
 	public OknoRozbal() {
 		okno = new JFrame();

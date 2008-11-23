@@ -12,8 +12,9 @@ import javax.swing.KeyStroke;
 import logika.Archiv;
 
 /**
- * Vlastni komponenta menu. Vytvari okno s napovedou a okno O programu.
- * @author Vlasta
+ * Menubar v hlavním okně.
+ * @author Vlastimil Ovčáčík
+ *
  */
 @SuppressWarnings("serial")
 public class MenuBar extends JMenuBar {
@@ -23,8 +24,9 @@ public class MenuBar extends JMenuBar {
 	private JDialog oknoNapoveda = new JDialog();
 
 	/**
-	 * Zpracovává události pri kliknutí na položku menu.
-	 * @author Vlasta
+	 * Ovladač událostí menu.
+	 * @author Vlastimil Ovčáčík
+	 *
 	 */
 	private class OvladacUdalostiMenu implements ActionListener {
 		@Override
@@ -49,7 +51,6 @@ public class MenuBar extends JMenuBar {
 
 	/**
 	 * Konstruktor menu
-	 * @param hlavniOkno
 	 */
 	public MenuBar() {
 		super();
