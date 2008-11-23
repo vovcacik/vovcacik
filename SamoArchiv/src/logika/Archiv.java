@@ -1,5 +1,6 @@
 package logika;
 
+import gui.OknoZabal;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import javax.swing.JOptionPane;
 
 public class Archiv {
 
@@ -117,6 +119,12 @@ public class Archiv {
 		File secFile;
 		try {
 			secFile = new File(newJar);
+			if (secFile.equals(jarFile)) {
+				OknoZabal oknoZabal = new OknoZabal();
+				oknoZabal.setVisible(true);
+				JOptionPane.showMessageDialog(null, "Zvolte jiný než aktuální archiv!", "Chyba", JOptionPane.ERROR_MESSAGE);
+				return;
+			}
 			secFile.createNewFile();
 
 			byte[] buf = new byte[1024];
@@ -127,10 +135,19 @@ public class Archiv {
 			ZipEntry entry = zin.getNextEntry();
 			while (entry != null) {
 				String name = entry.getName();
+				name = name.replaceAll("\\\\", "/");
 				boolean notInFiles = true;
+				System.out.println("\n\n-----------------------------\nEntry name: " + name);
 				for (File f : files) {
-					String fname = f.getName();
+					String fname = f.getPath();
+					String adr = adresar;
+					adr = adr.replaceAll("\\\\", "/");
+					fname = fname.replaceAll("\\\\", "/");
+					fname = fname.substring(fname.indexOf(adr) + adr.length());
+					fname = "/trunk/" + fname;
+					System.out.println("in folder: " + fname);
 					if (fname.equals(name)) {
+						System.out.println("NEZARAZENO: " + fname);
 						notInFiles = false;
 						break;
 					}

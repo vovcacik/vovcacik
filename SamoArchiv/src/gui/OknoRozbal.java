@@ -49,6 +49,7 @@ public class OknoRozbal {
 				pAdresar += "/";
 			}
 			archiv.rozbal(archiv.getThisPath(), pAdresar);
+			okno.dispose();
 
 		}
 
@@ -60,7 +61,7 @@ public class OknoRozbal {
 	public OknoRozbal() {
 		okno = new JFrame();
 		okno.setTitle("Okno rozbal");
-		okno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		pathAdresar = new JTextField(30);
 		buttonAdresar = new JButton("Vyber adresář");

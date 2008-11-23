@@ -71,7 +71,7 @@ public class OknoZabal {
 				pAdresar += "/";
 			}
 			archiv.zabal(pJar, pAdresar);
-
+			okno.dispose();
 		}
 
 	}
@@ -82,7 +82,7 @@ public class OknoZabal {
 	public OknoZabal() {
 		okno = new JFrame();
 		okno.setTitle("Okno zabal");
-		okno.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		pathJar = new JTextField(30);
 		buttonJar = new JButton("Vyber jar");
@@ -105,6 +105,10 @@ public class OknoZabal {
 		okno.setMinimumSize(new Dimension(340, 250));
 		okno.pack();
 		okno.setLocationRelativeTo(null);
+
+		if (new Archiv().isPrazdny()) {
+			pathJar.setText(new Archiv().getThisPath());
+		}
 
 	}
 
