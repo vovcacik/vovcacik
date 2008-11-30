@@ -21,6 +21,5 @@ public class TheTime {
 			basicService.showDocument(url);
 		} catch (MalformedURLException ignored) {
 		}
-		;
 	}
 }
