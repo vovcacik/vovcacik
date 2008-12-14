@@ -1,5 +1,7 @@
 package remoteHand;
 
+import java.io.IOException;
+
 public class RHProtocol {
 	static final String BYE = "HTTP/1.1 204 No Content\n";
 	static final String PREFIX = "GET /RemoteHand/?";
@@ -31,10 +33,16 @@ public class RHProtocol {
 		System.out.println(args.length);
 
 		// definitions
-		if (args[0] == "a") {
-
+		if (args[0].equals("a")) {
+			String[] cmds = {"C:\\WINDOWS\\system32\\notepad.exe",
+					"C:\\test.txt"};
+			try {
+				Runtime.getRuntime().exec(cmds);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		} else if (args[0] == "b") {
-
+			// nothing so far
 		} else {
 			// don't do anything
 		}
