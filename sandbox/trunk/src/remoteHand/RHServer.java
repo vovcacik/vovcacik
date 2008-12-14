@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 public class RHServer {
-	private static final int PORT = 80;
+	private static final int PORT = 50000;
 
 	public static void main(String[] args) throws IOException {
 		ServerSocket serverSocket = null;
