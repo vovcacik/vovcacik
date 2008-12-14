@@ -11,6 +11,7 @@ public class RHProtocol {
 		if (theInput != null) {
 			theInput = theInput.replace("%20", " ");
 			theInput = theInput.replace("%3A", ":");
+			theInput = theInput.replace("%26", "&");
 			theInput = theInput.replace("%5C", "/");
 			theInput = theInput.replace("%2F", "/");
 			if (theInput.startsWith(PREFIX)) {
@@ -24,7 +25,7 @@ public class RHProtocol {
 	private String[] getArgs(String theInput) {
 		theInput = theInput.substring(PREFIX.length(), theInput.length()
 				- SUFFIX.length());
-		String[] args = theInput.split(" ");
+		String[] args = theInput.split("&");
 		return args;
 	}
 
@@ -36,9 +37,8 @@ public class RHProtocol {
 		System.out.println(args.length);
 
 		// definitions
-		String[] cmds = {args[0], args[1]};
 		try {
-			Runtime.getRuntime().exec(cmds);
+			Runtime.getRuntime().exec(args[0]);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
