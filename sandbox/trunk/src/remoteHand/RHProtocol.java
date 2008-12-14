@@ -10,6 +10,9 @@ public class RHProtocol {
 	public String processInput(String theInput) {
 		if (theInput != null) {
 			theInput = theInput.replace("%20", " ");
+			theInput = theInput.replace("%3A", ":");
+			theInput = theInput.replace("%5C", "/");
+			theInput = theInput.replace("%2F", "/");
 			if (theInput.startsWith(PREFIX)) {
 				String[] args = getArgs(theInput);
 				processArgs(args);
@@ -33,18 +36,11 @@ public class RHProtocol {
 		System.out.println(args.length);
 
 		// definitions
-		if (args[0].equals("a")) {
-			String[] cmds = {"C:\\WINDOWS\\system32\\notepad.exe",
-					"C:\\test.txt"};
-			try {
-				Runtime.getRuntime().exec(cmds);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (args[0] == "b") {
-			// nothing so far
-		} else {
-			// don't do anything
+		String[] cmds = {args[0], args[1]};
+		try {
+			Runtime.getRuntime().exec(cmds);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
