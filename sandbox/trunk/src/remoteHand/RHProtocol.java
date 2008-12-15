@@ -38,15 +38,15 @@ public class RHProtocol {
 	private void processArgs(String[] args) {
 		// TODO vymazat debug stringy
 		for (String s : args) {
-			System.out.println(s);
+			System.out.print(s);
 		}
-		System.out.println(args.length);
+		System.out.println("\tpocet: " + args.length);
 
 		// security ask
 		boolean isApproved = TimedDialog.show("\""
 				+ socket.getInetAddress().getCanonicalHostName()
 				+ "\" is attempting to execute \"" + args[0] + "\"",
-				"RemoteHand - Event", 10000);
+				"RemoteHand Event: T-", 5000);
 
 		// definitions
 		if (isApproved) {
