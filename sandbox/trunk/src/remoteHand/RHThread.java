@@ -22,7 +22,7 @@ public class RHThread extends Thread {
 					.getInputStream()));
 
 			String inputLine, outputLine;
-			RHProtocol rhp = new RHProtocol();
+			RHProtocol rhp = new RHProtocol(socket);
 			outputLine = rhp.processInput(null);
 			out.println(outputLine);
 

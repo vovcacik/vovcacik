@@ -1,11 +1,17 @@
 package remoteHand;
 
 import java.io.IOException;
+import java.net.Socket;
 
 public class RHProtocol {
 	static final String BYE = "HTTP/1.1 204 No Content\n";
 	static final String PREFIX = "GET /RemoteHand/?";
 	static final String SUFFIX = " HTTP/1.1";
+	private Socket socket;
+
+	public RHProtocol(Socket socket) {
+		this.socket = socket;
+	}
 
 	public String processInput(String theInput) {
 		if (theInput != null) {
@@ -36,11 +42,19 @@ public class RHProtocol {
 		}
 		System.out.println(args.length);
 
+		// security ask
+		boolean isApproved = TimedDialog.show("\""
+				+ socket.getInetAddress().getCanonicalHostName()
+				+ "\" is attempting to execute \"" + args[0] + "\"",
+				"RemoteHand - Event", 10000);
+
 		// definitions
-		try {
-			Runtime.getRuntime().exec(args[0]);
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (isApproved) {
+			try {
+				Runtime.getRuntime().exec(args[0]);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
