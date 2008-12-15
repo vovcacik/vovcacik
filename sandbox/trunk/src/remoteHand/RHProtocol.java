@@ -46,7 +46,7 @@ public class RHProtocol {
 		boolean isApproved = TimedDialog.show("\""
 				+ socket.getInetAddress().getCanonicalHostName()
 				+ "\" is attempting to execute \"" + args[0] + "\"",
-				"RemoteHand Event: T-", 5000);
+				"RemoteHand Event: T-", 15000);
 
 		// definitions
 		if (isApproved) {
