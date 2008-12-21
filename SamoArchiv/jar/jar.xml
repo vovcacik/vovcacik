@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     21.12.2008 10:39                                                        
+     Vlastimil Ovcacik
+     
+     	Popis: Vytvoří z celého projektu SamoArchiv jar archiv a spustiho v Eclipse.
+     	   
+     	Spusteni:
+     	 1) Klikni pravym tlacitkem na jar.xml
+     	 2) Zvol "Run As" -> "Open External Tools Dialog..."
+     	 3) Z levého panelu zvol "Ant Build", potom v záložkách (nepovinne)
+     	 	3.1)   "Refresh"                                      ->
+     	   		   "Refresh resources upon completion"            -> 
+     	   		   "The project containing the selected resource"
+     	    3.2)   "Build"                                        ->
+     	   	       "Build before launch"                          -> 
+     	   	       "The project containing the selected resource"
+     	 4) Stiskni tlacitko "Run"
+     ====================================================================== -->
+
+<project basedir="." default="run">
+	
+	<description>
+		Vytvoří z celého projektu SamoArchiv jar archiv a spustiho v Eclipse.
+	</description>
+	
+	<target name="clean" description="Vymaze starou verzi jar archivu">
+		<delete file="SamoArchiv.jar" failonerror="false"/>
+	</target>
+	
+    <target name="jar" depends="clean" description="Vytvori jar archiv">
+        <jar destfile="SamoArchiv.jar" basedir="../bin">
+            <manifest>
+                <attribute name="Main-Class" value="logika.Start"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar" description="Spusti SamoArchiv.jar v Eclipse">
+        <java jar="SamoArchiv.jar" fork="true"/>
+    </target>
+
+</project>
