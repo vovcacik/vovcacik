@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -26,7 +27,7 @@ public class Archiv {
 
 	static final String TRUNK = "/trunk";
 	private ZipFile jarFile;
-	private Enumeration entries;
+	private List<ZipZaznam> entries;
 
 	public Archiv() {
 		try {
@@ -34,7 +35,13 @@ public class Archiv {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		entries = jarFile.entries();
+		
+		entries = new ArrayList<ZipZaznam>();
+		Enumeration entriesEnum = jarFile.entries();
+		while(entriesEnum.hasMoreElements()) {
+			ZipZaznam zaznam = ZipZaznam.getZipZaznam((ZipEntry)entriesEnum.nextElement());
+			entries.add(zaznam);
+		}
 	}
 
 	/**
@@ -42,58 +49,31 @@ public class Archiv {
 	 * @param pathCilDir Cílová složka, do které se rozbalí archiv.
 	 */
 	public void rozbal(String pathCilDir) {
-		pathCilDir = getFormattedPath(pathCilDir);
-		final int BUFFER = 2048;
-		try {
-			File cilDir = new File(pathCilDir);
-			cilDir.mkdirs();
-			BufferedOutputStream dest = null;
-			BufferedInputStream is = null;
-			ZipZaznam entry;
-
-			while (entries.hasMoreElements()) {
-				entry = ZipZaznam.getZipZaznam(entries.nextElement());
-				System.out.println("ENTRY: " + entry.getName());
-				// pokud entry není v trunku tak přeskoč, protože nechceme
-				// rozbalit i zdrojové soubory
-				if (!entry.isInTrunk()) {
-					continue;
-				}
-
-				// pokud je rozbalované entry v podsložce, vytvoř potřebné adresáře v cílovém adresáři
-				entry.mkdirs(pathCilDir);
-
-				System.out.println("Extracting: " + entry);
-				is = new BufferedInputStream(this.jarFile.getInputStream(entry.getZipEntry()));
-				int count;
-				byte data[] = new byte[BUFFER];
-				// výstupní proud, musíme odstranit řetězec '/trunk', aby nebyl vytvořen takový adresář v cílové složce
-				FileOutputStream fos = new FileOutputStream(pathCilDir + entry.getName().substring(TRUNK.length()));
-				dest = new BufferedOutputStream(fos, BUFFER);
-				while ((count = is.read(data, 0, BUFFER)) != -1) {
-					dest.write(data, 0, count);
-				}
-				dest.flush();
-				dest.close();
-				is.close();
+//		pathCilDir = getFormattedPath(pathCilDir, true);
+		File cilDir = new File(pathCilDir);
+		List<ZipZaznam> entriesInTrunk = new ArrayList<ZipZaznam>();
+		for (ZipZaznam entry : entries) {
+			if (entry.isInTrunk()) {
+				entriesInTrunk.add(entry);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		
+		Unpack.unpack(cilDir, jarFile, entriesInTrunk);
+		
 
 	}
 
 	/**
 	 * Zformátuje URL
-	 * @param pathCilDir
+	 * @param path
 	 * @return zformátovaný string
 	 */
-	private String getFormattedPath(String pathCilDir) {
-		pathCilDir = pathCilDir.replace('\\', '/');
-		if (!pathCilDir.endsWith("/")) {
-			pathCilDir = pathCilDir + "/";
+	private String getFormattedPath(String path, boolean isDir) {
+		path = path.replace('\\', '/');
+		if (isDir && !path.endsWith("/")) {
+			path = path + "/";
 		}
-		return pathCilDir;
+		return path;
 	}
 
 	/**
@@ -103,8 +83,8 @@ public class Archiv {
 	 * @param pathZdrojAdresar Adresář jehož obsah je určen k archivaci.
 	 */
 	public void zabal(String pathNovyJar, String pathZdrojAdresar) {
-		pathNovyJar = getFormattedPath(pathNovyJar);
-		pathZdrojAdresar = getFormattedPath(pathZdrojAdresar);
+		pathNovyJar = getFormattedPath(pathNovyJar, true);
+		pathZdrojAdresar = getFormattedPath(pathZdrojAdresar, true);
 
 		File zdrojovyJar = new File(this.getRootPath());
 		File zdrojAdresar = new File(pathZdrojAdresar);
