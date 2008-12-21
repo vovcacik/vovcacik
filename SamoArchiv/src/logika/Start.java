@@ -26,6 +26,7 @@ public class Start {
 				System.err.println("Parametry samorozbalovaciho archivu:\n" + "-r 'slozka'\t\tRozbali tento archiv do cilove slozky\n" + "-z 'jar' 'slozka'\tZabali slozku do jar archivu\n\n" + "Priklady:\n" + "java -jar archiv.jar -r 'C:\\slozka\\'\n" + "java -jar archiv.jar -z 'C:\\novyJar.jar' 'C:\\kArchivaci\\'");
 				System.exit(0);
 			}
+			System.exit(0);
 		}
 		HlavniOkno hlOkno = new HlavniOkno();
 		hlOkno.setVisible(true);
