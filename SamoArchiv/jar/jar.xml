@@ -18,14 +18,15 @@
      	 4) Stiskni tlacitko "Run"
      ====================================================================== -->
 
-<project basedir="." default="run">
+<project basedir="..\tests\" default="jar">
+	<!-- default="run" -->
 	
 	<description>
 		Vytvoří z celého projektu SamoArchiv jar archiv a spustiho v Eclipse.
 	</description>
 	
 	<target name="clean" description="Vymaze starou verzi jar archivu">
-		<delete file="SamoArchiv.jar" failonerror="false"/>
+		<delete file="SamoArchiv.jar" failonerror="true"/>
 	</target>
 	
     <target name="jar" depends="clean" description="Vytvori jar archiv">
@@ -33,11 +34,19 @@
             <manifest>
                 <attribute name="Main-Class" value="logika.Start"/>
             </manifest>
+        	<exclude name="data/*.*"/>
+        	<exclude name="sandbox/*.*"/>
+        	<exclude name="SamoArchiv.jar"/>
+        	<exclude name="**/tests/"/>
+        	<exclude name="**/data/"/>
+        	<exclude name="**/sandbox/"/>
         </jar>
     </target>
 
+    <!--
     <target name="run" depends="jar" description="Spusti SamoArchiv.jar v Eclipse">
         <java jar="SamoArchiv.jar" fork="true"/>
     </target>
+	-->
 
 </project>
