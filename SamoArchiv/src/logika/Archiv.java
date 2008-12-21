@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -25,7 +24,17 @@ import javax.swing.JOptionPane;
  */
 public class Archiv {
 
+	static final String TRUNK = "/trunk";
+	private ZipFile jarFile;
+	private Enumeration entries;
+
 	public Archiv() {
+		try {
+			jarFile = new ZipFile(this.getRootPath());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		entries = jarFile.entries();
 	}
 
 	/**
@@ -33,47 +42,33 @@ public class Archiv {
 	 * @param pathCilDir Cílová složka, do které se rozbalí archiv.
 	 */
 	public void rozbal(String pathCilDir) {
-		String pathZdrojJar = this.getRootPath();
-		pathCilDir = pathCilDir.replace('\\', '/');
-		if (!pathCilDir.endsWith("/")) {
-			pathCilDir = pathCilDir + "/";
-		}
+		pathCilDir = getFormattedPath(pathCilDir);
 		final int BUFFER = 2048;
 		try {
 			File cilDir = new File(pathCilDir);
 			cilDir.mkdirs();
 			BufferedOutputStream dest = null;
 			BufferedInputStream is = null;
-			ZipEntry entry;
-			ZipFile zdrojJar = new ZipFile(pathZdrojJar);
-			Enumeration entries = zdrojJar.entries();
+			ZipZaznam entry;
 
 			while (entries.hasMoreElements()) {
-				entry = (ZipEntry) entries.nextElement();
+				entry = ZipZaznam.getZipZaznam(entries.nextElement());
 				System.out.println("ENTRY: " + entry.getName());
 				// pokud entry není v trunku tak přeskoč, protože nechceme
 				// rozbalit i zdrojové soubory
-				if (!entry.getName().startsWith("/trunk")) {
+				if (!entry.isInTrunk()) {
 					continue;
 				}
 
-				// pokud je rozbalované entry v podsložce, vytvoř potřebné
-				// adresáře v cílovém adresáři
-				int indexLomitka;
-				String jmeno = entry.getName().replace('\\', '/');
-				if ((indexLomitka = jmeno.lastIndexOf('/')) != -1) {
-					String dir = entry.getName().substring("/trunk".length(), indexLomitka);
-					System.out.println("Extracting directory: " + pathCilDir + dir);
-					(new File(pathCilDir + dir)).mkdirs();
-				}
+				// pokud je rozbalované entry v podsložce, vytvoř potřebné adresáře v cílovém adresáři
+				entry.mkdirs(pathCilDir);
 
 				System.out.println("Extracting: " + entry);
-				is = new BufferedInputStream(zdrojJar.getInputStream(entry));
+				is = new BufferedInputStream(this.jarFile.getInputStream(entry.getZipEntry()));
 				int count;
 				byte data[] = new byte[BUFFER];
-				// výstupní proud, musíme odstranit řetězec '/trunk', aby nebyl
-				// vytvořen takový adresář v cílové složce
-				FileOutputStream fos = new FileOutputStream(pathCilDir + entry.getName().substring("/trunk".length()));
+				// výstupní proud, musíme odstranit řetězec '/trunk', aby nebyl vytvořen takový adresář v cílové složce
+				FileOutputStream fos = new FileOutputStream(pathCilDir + entry.getName().substring(TRUNK.length()));
 				dest = new BufferedOutputStream(fos, BUFFER);
 				while ((count = is.read(data, 0, BUFFER)) != -1) {
 					dest.write(data, 0, count);
@@ -89,17 +84,27 @@ public class Archiv {
 	}
 
 	/**
+	 * Zformátuje URL
+	 * @param pathCilDir
+	 * @return zformátovaný string
+	 */
+	private String getFormattedPath(String pathCilDir) {
+		pathCilDir = pathCilDir.replace('\\', '/');
+		if (!pathCilDir.endsWith("/")) {
+			pathCilDir = pathCilDir + "/";
+		}
+		return pathCilDir;
+	}
+
+	/**
 	 * Metoda zabal komprimuje obsah zdrojového adresáře do nového archivu jar,
 	 * jehož název (celá cesta) je dána parametrem pathNovaJar
 	 * @param pathNovyJar Archiv jar, který bude vytvořen
 	 * @param pathZdrojAdresar Adresář jehož obsah je určen k archivaci.
 	 */
 	public void zabal(String pathNovyJar, String pathZdrojAdresar) {
-		pathNovyJar = pathNovyJar.replace('\\', '/');
-		pathZdrojAdresar = pathZdrojAdresar.replace('\\', '/');
-		if (!pathZdrojAdresar.endsWith("/")) {
-			pathZdrojAdresar = pathZdrojAdresar + "/";
-		}
+		pathNovyJar = getFormattedPath(pathNovyJar);
+		pathZdrojAdresar = getFormattedPath(pathZdrojAdresar);
 
 		File zdrojovyJar = new File(this.getRootPath());
 		File zdrojAdresar = new File(pathZdrojAdresar);
@@ -129,10 +134,9 @@ public class Archiv {
 			ZipInputStream zin = new ZipInputStream(new BufferedInputStream(new FileInputStream(zdrojovyJar)));
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(new FileOutputStream(novyJar)));
 
-			ZipEntry entry = zin.getNextEntry();
+			ZipZaznam entry = ZipZaznam.getZipZaznam(zin.getNextEntry());
 			while (entry != null) {
 				String name = entry.getName();
-				name = name.replace("\\", "/");
 				boolean neduplikovany = true;
 				System.out.println("\n\n-----------------------------\nEntry name: " + name);
 				for (File f : files) {
@@ -155,13 +159,13 @@ public class Archiv {
 				// entry ze zdrojového jaru nebude zkopírován do nového jaru
 				// pokud ve zdrojové složce existuje s tímto souborem konflikt
 				if (neduplikovany) {
-					out.putNextEntry(new ZipEntry(name));
+					out.putNextEntry(ZipZaznam.getZipZaznam(name).getZipEntry());
 					int len;
 					while ((len = zin.read(buf)) > 0) {
 						out.write(buf, 0, len);
 					}
 				}
-				entry = zin.getNextEntry();
+				entry = ZipZaznam.getZipZaznam(zin.getNextEntry());
 			}
 			zin.close();
 
@@ -173,15 +177,14 @@ public class Archiv {
 
 			for (int i = 0; i < files.length; i++) {
 				if (files[i].isDirectory()) {
-					continue; // složky nezapisuji, protože se jinak tvoří
-					// duplikáty
+					continue; // složky nezapisuji, protože se jinak tvoří duplikáty
 				}
 				BufferedInputStream in = new BufferedInputStream(new FileInputStream(files[i].getPath()));
 				// převedeme abs. path na relativní (k pathZdrojAdresar)
 				String entryPath = files[i].getPath().substring(files[i].getPath().indexOf(pathZdrojAdresar) + pathZdrojAdresar.length());
 				System.out.println("entrypath: " + entryPath);
 				// zápis do cílového jar do složky trunk
-				out.putNextEntry(new ZipEntry("/trunk" + entryPath));
+				out.putNextEntry(ZipZaznam.getZipZaznam(TRUNK + entryPath).getZipEntry());
 				int len;
 				while ((len = in.read(buf)) > 0) {
 					out.write(buf, 0, len);
@@ -232,9 +235,9 @@ public class Archiv {
 			zip = new ZipFile(path);
 			Enumeration e = zip.entries();
 			while (e.hasMoreElements()) {
-				ZipEntry entry = (ZipEntry) e.nextElement();
+				ZipZaznam entry = ZipZaznam.getZipZaznam(e.nextElement());
 				System.out.println("getname  " + entry.getName());
-				if (entry.getName().startsWith("/trunk")) {
+				if (entry.getName().startsWith(TRUNK)) {
 					System.out.println("FALSE");
 					return false;
 				}
