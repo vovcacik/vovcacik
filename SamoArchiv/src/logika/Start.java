@@ -1,8 +1,6 @@
 package logika;
 
 import gui.HlavniOkno;
-import gui.OknoRozbal;
-import javax.swing.JOptionPane;
 
 public class Start {
 
@@ -17,6 +15,7 @@ public class Start {
 		Archiv archiv;
 		archiv = new Archiv();
 
+		//příkazový řádek
 		if (args.length != 0) {
 			if (args[0].equals("-z") && args.length == 3) {
 				archiv.zabal(args[1], args[2]);
@@ -28,15 +27,9 @@ public class Start {
 			}
 			System.exit(0);
 		}
-		HlavniOkno hlOkno = new HlavniOkno();
+		
+		//grafika
+		HlavniOkno hlOkno = new HlavniOkno(archiv);
 		hlOkno.setVisible(true);
-
-		if (!archiv.isPrazdny()) {
-			int vyber = JOptionPane.showConfirmDialog(null, "Archiv obsahuje soubory. Přejete si je nyní rozbalit?", "Rozbalit archiv?", JOptionPane.YES_NO_OPTION);
-			if (vyber == JOptionPane.YES_OPTION) {
-				OknoRozbal oknoRozbal = new OknoRozbal();
-				oknoRozbal.setVisible(true);
-			}
-		}
 	}
 }

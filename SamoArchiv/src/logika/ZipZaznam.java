@@ -3,19 +3,40 @@ package logika;
 import java.io.File;
 import java.util.zip.ZipEntry;
 
-public class ZipZaznam {
+/**
+ * Třída obaluje instance ZipEntry a poskytuje pro ně dodatečné metody.
+ * @author Vlastimil Ovčáčík
+ */
+class ZipZaznam {
 
 	ZipEntry zipEntry;
 
-	public static ZipZaznam getZipZaznam(String name) {
+	/**
+	 * Metoda vytvoří instanci ZipZaznam podle daného jména (param name)
+	 * @param name jméno nové instance ZipZaznam
+	 * @return instanci ZipZaznam
+	 */
+	static ZipZaznam getZipZaznam(String name) {
 		return (new ZipZaznam(name));
 	}
-
-	public static ZipZaznam getZipZaznam(ZipEntry zipEntry) {
+	
+	/**
+	 * Metoda zabalí zipEntry do třídy ZipZaznam a vrátí její instanci.
+	 * @param zipEntry
+	 * @return instance ZipZaznam
+	 */
+	static ZipZaznam getZipZaznam(ZipEntry zipEntry) {
 		return zipEntry==null ? null : new ZipZaznam(zipEntry);
 	}
 
-	public static ZipZaznam getZipZaznam(Object object) {
+	/**
+	 * Metoda se pokusí přetypovat object na ZipEntry a vrátí instanci ZipZaznam,
+	 * jinak null.
+	 * @param object Objekt ZipEntry.
+	 * @return	Pokud je možné object přetypovat na ZipEntry vrací instanci ZipZaznam,
+	 * jinak null.
+	 */
+	static ZipZaznam getZipZaznam(Object object) {
 		ZipEntry entry;
 		try {
 			entry = (ZipEntry) object;
@@ -25,34 +46,42 @@ public class ZipZaznam {
 		}
 		return getZipZaznam(entry);
 	}
-
-	private ZipZaznam(String name) {
-		this.zipEntry = new ZipEntry(name);
-	}
-
-	private ZipZaznam(ZipEntry zipEntry) {
-		this.zipEntry = zipEntry;
-	}
-
-	public String getName() {
+	
+	/**
+	 * Vrací správně formátované jméno záznamu.
+	 * @return jméno záznamu
+	 */
+	String getName() {
 		return zipEntry.getName().replace("\\", "/");
 	}
 
-	public ZipEntry getZipEntry() {
+	/**
+	 * Vrátí instanci ZipEntry, která odpovídá tomuto zipZaznamu.
+	 * @return odpovídající instance ZipEntry
+	 */
+	ZipEntry getZipEntry() {
 		return this.zipEntry;
 	}
-
-	public boolean isInTrunk() {
+	
+	/**
+	 * Určuje zda je tento záznam v trunku.
+	 * @return true pokud je v trunku, jinak false
+	 */
+	boolean isInTrunk() {
 		return getName().startsWith(Archiv.TRUNK);
 	}
 
-	public void mkdirs(String pathCilDir) {
+	/**
+	 * Do základní složky (directory) vytvoří všechny neexistující složky, které jsou
+	 * v cestě tohoto záznamu.
+	 * @param directory 
+	 */
+	void mkdirs(String directory) {
 		int indexLomitka;
 		String jmeno = getName();
 		if ((indexLomitka = jmeno.lastIndexOf('/')) != -1) {
 			String dir = jmeno.substring(Archiv.TRUNK.length(), indexLomitka);
-			System.out.println("Extracting directory: " + pathCilDir + dir);
-			(new File(pathCilDir + dir)).mkdirs();
+			(new File(directory + dir)).mkdirs();
 		}
 	}
 	
@@ -61,4 +90,19 @@ public class ZipZaznam {
 		return zipEntry.toString();
 	}
 
+	/**
+	 * Konstruktor vytvoří ZipZaznam podle daného jména záznamu.
+	 * @param name Jméno záznamu.
+	 */
+	private ZipZaznam(String name) {
+		this.zipEntry = new ZipEntry(name);
+	}
+
+	/**
+	 * Konstruktor vytvoří ZipZaznam podle dané instance zipEntry.
+	 * @param zipEntry
+	 */
+	private ZipZaznam(ZipEntry zipEntry) {
+		this.zipEntry = zipEntry;
+	}
 }

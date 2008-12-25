@@ -37,6 +37,7 @@ public class OknoZabal {
 	//Tlačítko "Zabal"
 	private JButton buttonHotovo;
 	private JPanel panelHotovo;
+	private Archiv archiv;
 
 	/**
 	 * Otevírá JFileChooser pro výběr umístění nového archivu jar.
@@ -48,7 +49,7 @@ public class OknoZabal {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fc.setCurrentDirectory(new File(new Archiv().getRootPath()));
+			fc.setCurrentDirectory(new File(archiv.getPath()));
 			int returnVal = fc.showSaveDialog(okno);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
@@ -67,7 +68,7 @@ public class OknoZabal {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fc.setCurrentDirectory(new File(new Archiv().getRootPath()));
+			fc.setCurrentDirectory(new File(archiv.getPath()));
 			int returnVal = fc.showSaveDialog(okno);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
@@ -84,7 +85,6 @@ public class OknoZabal {
 	private class ButtonHotovoListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Archiv archiv = new Archiv();
 			String pJar = pathJar.getText();
 			String pAdresar = pathAdresar.getText();
 			if (!(pAdresar.endsWith("/") || pAdresar.endsWith("\\"))) {
@@ -98,8 +98,10 @@ public class OknoZabal {
 
 	/**
 	 * Konstruktor samotného okna.
+	 * @param archiv 
 	 */
-	public OknoZabal() {
+	public OknoZabal(Archiv archiv) {
+		this.archiv = archiv;
 		okno = new JFrame();
 		okno.setTitle("Komprimovat...");
 		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -141,12 +143,16 @@ public class OknoZabal {
 		okno.pack();
 		okno.setLocationRelativeTo(null);
 
-		if (new Archiv().isPrazdny()) {
-			pathJar.setText(new Archiv().getRootPath());
+		if (archiv.isPrazdny()) {
+			pathJar.setText(archiv.getPath());
 		}
 
 	}
 
+	/**
+	 * Zobrazí okno.
+	 * @param visible
+	 */
 	public void setVisible(boolean visible) {
 		okno.setVisible(visible);
 	}

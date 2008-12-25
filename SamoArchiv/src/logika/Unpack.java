@@ -6,9 +6,15 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.zip.ZipFile;
 
-public class Unpack {
+class Unpack {
 	
-	public static void unpack(File cilDir, ZipFile jarFile, java.util.List<ZipZaznam> entries) {
+	/**
+	 * Do složky cilDir rozbalí všechny dané záznamy (entries) z JAR archivu jarFile.
+	 * @param cilDir	Cílová složka, do které se mají rozbalit záznamy.
+	 * @param jarFile	Archiv JAR.
+	 * @param entries	Záznamy z jarFile, které se mají rozbalit
+	 */
+	static void unpack(File cilDir, ZipFile jarFile, java.util.List<ZipZaznam> entries) {
 		final int BUFFER = 2048;
 		try {
 			cilDir.mkdirs();

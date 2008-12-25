@@ -3,7 +3,6 @@ package gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import javax.swing.JDialog;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,7 +20,7 @@ public class MenuBar extends JMenuBar {
 
 	private JMenu menu;
 	private JMenuItem menuItem;
-	private JDialog oknoNapoveda = new JDialog();
+	private Archiv archiv;
 
 	/**
 	 * Ovladač událostí menu.
@@ -32,13 +31,13 @@ public class MenuBar extends JMenuBar {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("Nový archiv")) {
-				OknoZabal oknoZabal = new OknoZabal();
+				OknoZabal oknoZabal = new OknoZabal(archiv);
 				oknoZabal.setVisible(true);
 			} else if (e.getActionCommand().equals("Rozbal archiv")) {
-				if (new Archiv().isPrazdny()) {
+				if (archiv.isPrazdny()) {
 					JOptionPane.showMessageDialog(null, "Archiv je prázdný, nelze rozbalit...", "Chyba", JOptionPane.ERROR_MESSAGE);
 				} else {
-					OknoRozbal oknoRozbal = new OknoRozbal();
+					OknoRozbal oknoRozbal = new OknoRozbal(archiv);
 					oknoRozbal.setVisible(true);
 				}
 			} else if (e.getActionCommand().equals("Konec")) {
@@ -51,9 +50,11 @@ public class MenuBar extends JMenuBar {
 
 	/**
 	 * Konstruktor menu
+	 * @param archiv 
 	 */
-	public MenuBar() {
+	public MenuBar(Archiv archiv) {
 		super();
+		this.archiv = archiv;
 		OvladacUdalostiMenu ovladac = new OvladacUdalostiMenu();
 		// Základní menu
 		menu = new JMenu("Soubor");

@@ -27,17 +27,17 @@ public class OknoRozbal {
 	private JTextField pathAdresar;
 	private JButton buttonAdresar;
 	private JButton buttonHotovo;
+	private Archiv archiv;
 
 	/**
 	 * Zobrazí JFileChooser při stisku tlačítka "Procházet" (buttonAdresar)
 	 * @author Vlastimil Ovčáčík
-	 *
 	 */
 	private class ButtonAdresarListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fc.setCurrentDirectory(new File(new Archiv().getRootPath()));
+			fc.setCurrentDirectory(new File(archiv.getPath()));
 			int returnVal = fc.showSaveDialog(okno);
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fc.getSelectedFile();
@@ -52,25 +52,23 @@ public class OknoRozbal {
 	 *
 	 */
 	private class ButtonHotovoListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Archiv archiv = new Archiv();
 			String pAdresar = pathAdresar.getText();
 			if (!(pAdresar.endsWith("/") || pAdresar.endsWith("\\"))) {
 				pAdresar += "/";
 			}
 			archiv.rozbal(pAdresar);
 			okno.dispose();
-
 		}
-
 	}
 
 	/**
 	 * Konstruktor.
+	 * @param archiv
 	 */
-	public OknoRozbal() {
+	public OknoRozbal(Archiv archiv) {
+		this.archiv = archiv;
 		okno = new JFrame();
 		okno.setTitle("Extrahovat...");
 		okno.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -102,6 +100,10 @@ public class OknoRozbal {
 
 	}
 
+	/**
+	 * Zobrazí OknoRozbal. 
+	 * @param visible
+	 */
 	public void setVisible(boolean visible) {
 		okno.setVisible(visible);
 	}
