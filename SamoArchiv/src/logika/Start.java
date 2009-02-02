@@ -5,17 +5,16 @@ import gui.HlavniOkno;
 public class Start {
 
 	/**
-	 * Archiv má dva možné parametry. 
-	 * -r 'slozka'         Rozbalí tento archiv do cílové složky
-	 * -z 'jar' 'slozka'   Zabalí složku do jar archivu
-	 * Bez parametrů bude spuštěn gui.
+	 * Archiv má dva možné parametry. -r 'slozka' Rozbalí tento archiv do cílové
+	 * složky -z 'jar' 'slozka' Zabalí složku do jar archivu Bez parametrů bude
+	 * spuštěn gui.
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		Archiv archiv;
 		archiv = new Archiv();
 
-		//příkazový řádek
+		// příkazový řádek
 		if (args.length != 0) {
 			if (args[0].equals("-z") && args.length == 3) {
 				archiv.zabal(args[1], args[2]);
@@ -27,8 +26,8 @@ public class Start {
 			}
 			System.exit(0);
 		}
-		
-		//grafika
+
+		// grafika
 		HlavniOkno hlOkno = new HlavniOkno(archiv);
 		hlOkno.setVisible(true);
 	}

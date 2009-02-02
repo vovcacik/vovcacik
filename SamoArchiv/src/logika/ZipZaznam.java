@@ -19,22 +19,22 @@ class ZipZaznam {
 	static ZipZaznam getZipZaznam(String name) {
 		return (new ZipZaznam(name));
 	}
-	
+
 	/**
 	 * Metoda zabalí zipEntry do třídy ZipZaznam a vrátí její instanci.
 	 * @param zipEntry
 	 * @return instance ZipZaznam
 	 */
 	static ZipZaznam getZipZaznam(ZipEntry zipEntry) {
-		return zipEntry==null ? null : new ZipZaznam(zipEntry);
+		return zipEntry == null ? null : new ZipZaznam(zipEntry);
 	}
 
 	/**
-	 * Metoda se pokusí přetypovat object na ZipEntry a vrátí instanci ZipZaznam,
-	 * jinak null.
+	 * Metoda se pokusí přetypovat object na ZipEntry a vrátí instanci
+	 * ZipZaznam, jinak null.
 	 * @param object Objekt ZipEntry.
-	 * @return	Pokud je možné object přetypovat na ZipEntry vrací instanci ZipZaznam,
-	 * jinak null.
+	 * @return Pokud je možné object přetypovat na ZipEntry vrací instanci
+	 *         ZipZaznam, jinak null.
 	 */
 	static ZipZaznam getZipZaznam(Object object) {
 		ZipEntry entry;
@@ -46,7 +46,7 @@ class ZipZaznam {
 		}
 		return getZipZaznam(entry);
 	}
-	
+
 	/**
 	 * Vrací správně formátované jméno záznamu.
 	 * @return jméno záznamu
@@ -62,7 +62,7 @@ class ZipZaznam {
 	ZipEntry getZipEntry() {
 		return this.zipEntry;
 	}
-	
+
 	/**
 	 * Určuje zda je tento záznam v trunku.
 	 * @return true pokud je v trunku, jinak false
@@ -72,9 +72,9 @@ class ZipZaznam {
 	}
 
 	/**
-	 * Do základní složky (directory) vytvoří všechny neexistující složky, které jsou
-	 * v cestě tohoto záznamu.
-	 * @param directory 
+	 * Do základní složky (directory) vytvoří všechny neexistující složky, které
+	 * jsou v cestě tohoto záznamu.
+	 * @param directory
 	 */
 	void mkdirs(String directory) {
 		int indexLomitka;
@@ -84,7 +84,7 @@ class ZipZaznam {
 			(new File(directory + dir)).mkdirs();
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return zipEntry.toString();

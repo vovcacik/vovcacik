@@ -3,6 +3,7 @@ package logika;
 import gui.OknoZabal;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -28,17 +29,20 @@ public class Archiv {
 	public Archiv() {
 		path = this.getRootPath();
 		try {
-			jarZipFile = new ZipFile(path);
+			System.out.println(path);
 			jarFile = new File(path);
+			System.out.println("jarFile existuje?:" + jarFile.exists());
+			System.out.println("jarFile cesta:" + jarFile.getAbsolutePath());
+			jarZipFile = new ZipFile(jarFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		//vytvoříme seznam záznamu v celém JAR archivu
+		// vytvoříme seznam záznamu v celém JAR archivu
 		entries = new ArrayList<ZipZaznam>();
 		Enumeration entriesEnum = jarZipFile.entries();
-		while(entriesEnum.hasMoreElements()) {
-			ZipZaznam zaznam = ZipZaznam.getZipZaznam((ZipEntry)entriesEnum.nextElement());
+		while (entriesEnum.hasMoreElements()) {
+			ZipZaznam zaznam = ZipZaznam.getZipZaznam((ZipEntry) entriesEnum.nextElement());
 			entries.add(zaznam);
 		}
 	}
@@ -68,11 +72,11 @@ public class Archiv {
 	public void zabal(String pathNovyJar, String pathZdrojAdresar) {
 		pathNovyJar = getFormattedPath(pathNovyJar, true);
 		pathZdrojAdresar = getFormattedPath(pathZdrojAdresar, true);
-		
+
 		File novyJar = new File(pathNovyJar);
 		File zdrojAdresar = new File(pathZdrojAdresar);
 		File files[] = getSeznamPodsouboru(zdrojAdresar.listFiles());
-		
+
 		// kontroluje zde nechceme zapisovat do právě otevřeného archivu
 		if (novyJar.equals(jarFile)) {
 			OknoZabal oknoZabal = new OknoZabal(this);
@@ -80,17 +84,17 @@ public class Archiv {
 			JOptionPane.showMessageDialog(null, "Zvolte jiný než aktuální archiv!", "Chyba", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
-		
+
 		try {
 			novyJar.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		Pack packer = new Pack(novyJar, zdrojAdresar, files);
 		packer.zabal(jarFile);
 	}
-	
+
 	/**
 	 * Tato metoda zjišťuje zda aktuální archiv obsahuje nějaké archivované
 	 * soubory nebo ne. Vztahuje se jen ke složce trunk.
@@ -104,7 +108,7 @@ public class Archiv {
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Vrací řetězec s cestou k tomuto archivu.
 	 * @return cesta k archivu
@@ -112,7 +116,7 @@ public class Archiv {
 	public String getPath() {
 		return this.path;
 	}
-	
+
 	/**
 	 * Metoda vrací absolutní cestu k právě spuštěnému jar archivu ve tvaru
 	 * např. 'C:/složka/podsložka/archiv.jar'
@@ -120,8 +124,9 @@ public class Archiv {
 	 */
 	private String getRootPath() {
 		URL url = this.getClass().getResource("Archiv.class");
-		String path = url.getPath();
-		path = path.substring(path.indexOf("file:/") + "file:/".length(), path.lastIndexOf('!'));
+		URI uri = URI.create(url.getPath());
+		String path = uri.getPath();
+		path = path.substring(1, path.lastIndexOf('!'));
 		return path.replaceAll("%20", " ");
 	}
 
