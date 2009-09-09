@@ -21,6 +21,8 @@
 package org.klomp.snark.bencode;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -57,6 +59,15 @@ public class BEValue
         this.value = value;
     }
 
+    public boolean isString() {
+    	try{
+    		getString();
+    	} catch (Exception e) {
+			return false;
+		}
+    	return true;
+    }
+    
     /**
      * Returns this BEValue as a String. This operation only succeeds when the
      * BEValue is a byte[], otherwise it will throw a InvalidBEncodingException.
@@ -73,6 +84,15 @@ public class BEValue
         }
     }
 
+    public boolean isBytes() {
+    	try{
+    		getBytes();
+    	}catch (Exception e) {
+			return false;
+		}
+    	return true;
+    }
+    
     /**
      * Returns this BEValue as a byte[]. This operation only succeeds when the
      * BEValue is actually a byte[], otherwise it will throw a
@@ -87,6 +107,15 @@ public class BEValue
         }
     }
 
+    public boolean isNumber() {
+    	try{
+    		getNumber();
+    	}catch (Exception e) {
+			return false;
+		}
+    	return true;
+    }
+    
     /**
      * Returns this BEValue as a Number. This operation only succeeds when the
      * BEValue is actually a Number, otherwise it will throw a
@@ -123,6 +152,15 @@ public class BEValue
         return getNumber().longValue();
     }
 
+    public boolean isList(){
+    	try{
+    		getList();
+    	}catch (Exception e) {
+			return false;
+		}
+    	return true;
+    }
+    
     /**
      * Returns this BEValue as a List of BEValues. This operation only succeeds
      * when the BEValue is actually a List, otherwise it will throw a
@@ -137,6 +175,15 @@ public class BEValue
         }
     }
 
+    public boolean isMap() {
+    	try{
+    		getMap();
+    	}catch (Exception e) {
+			return false;
+		}
+    	return true;
+    }
+    
     /**
      * Returns this BEValue as a Map of BEValue keys and BEValue values. This
      * operation only succeeds when the BEValue is actually a Map, otherwise it
