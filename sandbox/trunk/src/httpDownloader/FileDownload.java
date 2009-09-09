@@ -57,9 +57,8 @@ public class FileDownload {
 	}
 
 	public static void main(String[] args) {
-		String prefix = "http://dl.getdropbox.com/u/17/Dropbox ";
-		String verze = "0.6.314";
-		String postfix = ".exe";
-		download((prefix + verze + postfix).replaceAll(" ", "%20"));
+		FileDownload.download(
+				"http://isohunt.com/download/55368713/640FE84C613C17F663551D218689A64E8AEBEABE.torrent", 
+				"c:\\Documents and Settings\\Vlasta\\plocha\\test");	
 	}
 }
