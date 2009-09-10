@@ -28,6 +28,7 @@ public class ProxyServer {
 			while (true) {
 				Socket s = server.accept(); // pøijmout klienta
 				ClientThread newclient = new ClientThread(s, this); // vytvoøit vlákno
+				System.out.println("New client: " + s.getInetAddress());
 				clients.add(newclient); // pøidat klienta do seznamu
 				newclient.start(); // spustit vlákno
 			}
