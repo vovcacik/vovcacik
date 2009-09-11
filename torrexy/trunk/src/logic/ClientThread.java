@@ -6,13 +6,13 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClientThread extends Thread {
-	private static final String TRACKER_ADDRESS_PATTERN = "http://(.+?)/{1}";//group 1=address
-	//TODO group2 = port?
+	private static final String TRACKER_URI_PATTERN = "^GET http://(.+?):?(\\d*)/.* HTTP/\\d.\\d$";
+	//group 1 = inetAddress of tracker; group 2 = port
+//	private static final String TRACKER_URI_PATTERN = "http://(.+?)/{1}";//group 1=address
 	ProxyServer proxyServer;
 	Socket socket;
 	PrintStream out;
@@ -54,9 +54,10 @@ public class ClientThread extends Thread {
 	}
 
 	private void processMessage(String message) {
-		Pattern pattern = Pattern.compile(TRACKER_ADDRESS_PATTERN);
+		Pattern pattern = Pattern.compile(TRACKER_URI_PATTERN, Pattern.MULTILINE);
 		Matcher matcher = pattern.matcher(message);
 		InetAddress trackerInetAddress = null;
+		int trackerPort = 80; // default HTTP port
 		Socket trackerSocket = null;
 		PrintStream trackerOut;
 		BufferedReader trackerIn; //TODO close socket, in, out
@@ -65,9 +66,13 @@ public class ClientThread extends Thread {
 		while (matcher.find()) {
 			found = true;
 			String address = matcher.group(1);
+			System.out.println(matcher.group(2));
+			if (!matcher.group(2).equals("")){
+				trackerPort = Integer.parseInt(matcher.group(2));
+			}
 			try {
 				trackerInetAddress = InetAddress.getByName(address);
-				trackerSocket = new Socket(trackerInetAddress, 80); //TODO ne jen port 80
+				trackerSocket = new Socket(trackerInetAddress, trackerPort);
 			} catch (Exception e) {
 				e.printStackTrace();
 				close();
