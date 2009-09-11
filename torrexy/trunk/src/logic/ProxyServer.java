@@ -1,47 +1,37 @@
 package logic;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 
-/** Hlavní tøída zajišující provoz chatovacího serveru. */
 public class ProxyServer {
-	/** Port, na kterém server pobìí. */
-	public static final int PORT = 8989;
-	/** Soket chatovacího serveru. */
-	private ServerSocket server;
-	/** Seznam pøipojenıch klientù. */
+	public static final int PROXY_PORT = 8282;
+	private ServerSocket proxyServer;
 	private List<ClientThread> clients;
-
-	/** Spustí server. */
 
 	public void run() {
 		clients = new java.util.ArrayList<ClientThread>();
 
 		try {
-			server = new ServerSocket(PORT); // vytvoøit serverovı soket
-			// naslouchající na 0.0.0.0
+			proxyServer = new ServerSocket(PROXY_PORT);// naslouchající na 0.0.0.0
 			while (true) {
-				Socket s = server.accept(); // pøijmout klienta
-				ClientThread newclient = new ClientThread(s, this); // vytvoøit vlákno
+				Socket s = proxyServer.accept();
+				ClientThread newClient = new ClientThread(s, this);
 				System.out.println("New client: " + s.getInetAddress());
-				clients.add(newclient); // pøidat klienta do seznamu
-				newclient.start(); // spustit vlákno
+				clients.add(newClient);
+				newClient.start();
 			}
 		} catch (IOException e) {
 			e.printStackTrace(System.err);
 		} finally {
-			if (server != null) {
-				// odpojit všechny klienty
-				for (ClientThread clt : getClients())
+			if (proxyServer != null) {
+				for (ClientThread clt : getClients()) {
 					clt.close();
+				}
 				clients.clear();
 				try {
-					server.close();
+					proxyServer.close();
 				} catch (IOException e) {
 				}
 			}

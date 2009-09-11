@@ -10,120 +10,101 @@ import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import sun.net.InetAddressCachePolicy;
-
-import com.sun.org.apache.bcel.internal.generic.INEG;
-
-/** Vl·kno zajiöùujÌcÌ ËtenÌ zpr·v od klienta. */
 public class ClientThread extends Thread {
-		/** Klient˘v soket. */
-		Socket socket;
-		/** V˝stupnÌ proud. */
-		PrintStream out;
-		/** VstupnÌ proud. */
-		BufferedReader in;
-		ProxyServer server;
+	private static final String TRACKER_ADDRESS_PATTERN = "http://(.+?)/{1}";//group 1=address
+	//TODO group2 = port?
+	ProxyServer proxyServer;
+	Socket socket;
+	PrintStream out;
+	BufferedReader in;
+	Socket trackerSocket;
+	PrintStream trackerOut;
+	BufferedReader trackerIn;
 
-		/** Vytvo¯Ì novÈ klientskÈ vl·kno. */
-		public ClientThread(Socket socket, ProxyServer server) {
-			this.socket = socket;
-			this.server = server;
-			try {
-				out = new PrintStream(socket.getOutputStream()); // vytvo¯it
-																	// PrintStream
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream())); // vytvo¯it
-																							// BufferedReader
-																							// //
-																							// BufferedReader
-			} catch (IOException e) {
-				e.printStackTrace(System.err);
-				close();
-			}
-		}
-
-		public void run() {
-			try {
-				String message = "";
-				while (true) {
-					String line = in.readLine();
-					if (line == null) break;
-					if (line.startsWith("/quit")) break;
-					message += line+"\n";
-					if (line.equals("")) {
-						System.out.println("///\n"+message+"///\n\n");
-						processMessage(message);
-						message="";
-					}
-				}
-			} catch (IOException e) {
-				System.err.println("Kvuli chybe odpojen klient.");
-				e.printStackTrace(System.err);
-			} finally {
-				close(); // odpojit
-			}
-		}
-
-		private void processMessage(String message) {
-			Pattern pattern = Pattern.compile("http://.+?/{1}");
-			Matcher matcher = pattern.matcher(message);
-			InetAddress inetAddress = null;
-			Socket socket = null;
-			PrintStream serverout;
-			BufferedReader serverin;
-
-			boolean found = false;
-			while (matcher.find()) {
-				String address = matcher.group();
-				address = address.substring(7, address.length()-1);
-				try {
-					inetAddress = InetAddress.getByName(address);
-				} catch (UnknownHostException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				found = true;
-				try {
-					socket = new Socket(inetAddress, 80);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				try {
-					serverout = new PrintStream(socket.getOutputStream());
-					serverin = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					serverout.print(message);
-					serverout.flush();
-					message = "";
-					while (true) {
-						String line = serverin.readLine();
-						if (line == null) break;
-						if (line.startsWith("/quit")) break;
-						message += line+"\n";
-						if (line.equals("")||true) {
-							System.out.println("///\n"+message+"///\n\n");
-							out.print(message);
-							message="";
-						}
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				break;
-			}
-			if(!found){
-				System.out.println("No match.");
-			}
-
-		}
-
-		/** OdpojÌ klienta. */
-		public void close() {
-			server.getClients().remove(this); // vymazat ze seznamu
-			try {
-				out.close(); // zav¯Ìt v˝stupnÌ proud
-				in.close(); // zav¯Ìt vstupnÌ proud
-				socket.close(); // zav¯Ìt soket
-			} catch (IOException e) {
-			}
+	public ClientThread(Socket socket, ProxyServer server) {
+		this.socket = socket;
+		this.proxyServer = server;
+		try {
+			out = new PrintStream(socket.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+			close();
 		}
 	}
+
+	public void run() {
+		try {
+			String message = "";
+			while (true) {
+				String line = in.readLine();
+				if (line==null) break;
+				message += line+"\n";
+				if (line.equals("")) { //TODO zpr·va m˘ûe pokraËovat i po pr·zdnÈm ¯·dku
+					System.out.println("###"+message+"###");//TODO vymazat
+					processMessage(message);
+					message="";
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace(System.err);
+		} finally {
+			close();
+		}
+	}
+
+	private void processMessage(String message) {
+		Pattern pattern = Pattern.compile(TRACKER_ADDRESS_PATTERN);
+		Matcher matcher = pattern.matcher(message);
+		InetAddress trackerInetAddress = null;
+		Socket trackerSocket = null;
+		PrintStream trackerOut;
+		BufferedReader trackerIn; //TODO close socket, in, out
+
+		boolean found = false;
+		while (matcher.find()) {
+			found = true;
+			String address = matcher.group(1);
+			try {
+				trackerInetAddress = InetAddress.getByName(address);
+				trackerSocket = new Socket(trackerInetAddress, 80); //TODO ne jen port 80
+			} catch (Exception e) {
+				e.printStackTrace();
+				close();
+			}
+			try {
+				trackerOut = new PrintStream(trackerSocket.getOutputStream());
+				trackerIn = new BufferedReader(new InputStreamReader(trackerSocket.getInputStream()));
+
+				trackerOut.print(message);
+				trackerOut.flush();
+				
+				while (true) {
+					String line = trackerIn.readLine();
+					if (line == null) break;
+					out.println(line);
+					System.out.println("///"+line+"///"); //TODO delete
+				}
+			} catch (IOException e){
+				e.printStackTrace();
+				close();
+			}
+		} if(!found){
+			System.out.println("Remote server address (tracker) not found.");
+		} 
+	}
+	/** OdpojÌ klienta. */
+	public void close() {
+		proxyServer.getClients().remove(this);
+		try {
+			out.close();
+			in.close();
+			socket.close();
+			if(trackerOut!=null)trackerOut.close();
+			if(trackerIn!=null)trackerIn.close();
+			if(trackerSocket!=null)trackerSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
