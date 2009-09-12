@@ -15,13 +15,13 @@ public class ProxyServer {
 		clients = new java.util.ArrayList<ClientThread>();
 
 		try {
-			proxyServer = new ServerSocket(PROXY_PORT);// naslouchající na 0.0.0.0
+			proxyServer = new ServerSocket(PROXY_PORT);// naslouchající na 0.0.0.0 TODO zmìnit jen na 1 IP
 			while (true) {
 				Socket s = proxyServer.accept();
 				getNewClient(s).start();
-				System.out.println("New client: " + s.getInetAddress());
+				System.out.println("New client: " + s.getInetAddress().getHostAddress()+", "+s.getInetAddress().getHostName());
 			}
-		} catch (IOException e) {
+		} catch (IOException e) { //TODO vyhazuje více vyjímek - ošetøit
 			e.printStackTrace(System.err);
 		} finally {
 			if (proxyServer != null) {
@@ -32,7 +32,12 @@ public class ProxyServer {
 				try {
 					proxyServer.close();
 				} catch (IOException e) {
+					System.err.println("Error: Proxy server socket has not been closed.");
+					e.printStackTrace(System.err);
 				}
+			} else {
+				//TODO proxyServer == null
+				//TODO udìlat close metodu pro ProxyServer tøídu?
 			}
 		}
 	}

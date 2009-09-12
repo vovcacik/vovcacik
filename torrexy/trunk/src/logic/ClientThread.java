@@ -6,13 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ClientThread extends Thread {
-	private static final String TRACKER_URI_PATTERN = "^GET http://(.+?):?(\\d*)/.* HTTP/\\d.\\d$";
-	//group 1 = inetAddress of tracker; group 2 = port
-//	private static final String TRACKER_URI_PATTERN = "http://(.+?)/{1}";//group 1=address
 	ProxyServer proxyServer;
 	Socket socket;
 	PrintStream out;
@@ -40,6 +35,7 @@ public class ClientThread extends Thread {
 				int dstPort = msg.getDstPort();
 				dst = proxyServer.getNewClient(dstInetAddress, dstPort);
 				dst.setDst(this);
+				msg.loadAll();
 				dst.start();
 			}
 			dst.send(msg);
@@ -65,11 +61,11 @@ public class ClientThread extends Thread {
 			out.close();
 			in.close();
 			socket.close();
-//			if(trackerOut!=null)trackerOut.close();
-//			if(trackerIn!=null)trackerIn.close();
-//			if(trackerSocket!=null)trackerSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		proxyServer.getClients().remove(dst);
+		if (dst!=null) dst.close();
+		dst=null;
 	}
 }
