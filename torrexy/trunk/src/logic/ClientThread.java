@@ -17,13 +17,12 @@ public class ClientThread extends Thread {
 	Socket socket;
 	PrintStream out;
 	BufferedReader in;
-	Socket trackerSocket;
-	PrintStream trackerOut;
-	BufferedReader trackerIn;
+	ClientThread dst;
 
 	public ClientThread(Socket socket, ProxyServer server) {
 		this.socket = socket;
 		this.proxyServer = server;
+		this.dst = null;
 		try {
 			out = new PrintStream(socket.getOutputStream());
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -34,69 +33,30 @@ public class ClientThread extends Thread {
 	}
 
 	public void run() {
-		try {
-			String message = "";
-			while (true) {
-				String line = in.readLine();
-				if (line==null) break;
-				message += line+"\n";
-				if (line.equals("")) { //TODO zpráva mùže pokraèovat i po prázdném øádku
-					System.out.println("###"+message+"###");//TODO vymazat
-					processMessage(message);
-					message="";
-				}
+		while(true) {
+			Message msg = new Message(this);
+			if(dst == null) {
+				InetAddress dstInetAddress = msg.getDstInetAddress();
+				int dstPort = msg.getDstPort();
+				dst = proxyServer.getNewClient(dstInetAddress, dstPort);
+				dst.setDst(this);
+				dst.start();
 			}
-		} catch (IOException e) {
-			e.printStackTrace(System.err);
-		} finally {
-			close();
+			dst.send(msg);
 		}
 	}
+	void setDst(ClientThread dst) {
+		this.dst = dst;
+	}
 
-	private void processMessage(String message) {
-		Pattern pattern = Pattern.compile(TRACKER_URI_PATTERN, Pattern.MULTILINE);
-		Matcher matcher = pattern.matcher(message);
-		InetAddress trackerInetAddress = null;
-		int trackerPort = 80; // default HTTP port
-		Socket trackerSocket = null;
-		PrintStream trackerOut;
-		BufferedReader trackerIn; //TODO close socket, in, out
-
-		boolean found = false;
-		while (matcher.find()) {
-			found = true;
-			String address = matcher.group(1);
-			System.out.println(matcher.group(2));
-			if (!matcher.group(2).equals("")){
-				trackerPort = Integer.parseInt(matcher.group(2));
-			}
-			try {
-				trackerInetAddress = InetAddress.getByName(address);
-				trackerSocket = new Socket(trackerInetAddress, trackerPort);
-			} catch (Exception e) {
-				e.printStackTrace();
-				close();
-			}
-			try {
-				trackerOut = new PrintStream(trackerSocket.getOutputStream());
-				trackerIn = new BufferedReader(new InputStreamReader(trackerSocket.getInputStream()));
-
-				trackerOut.print(message);
-				trackerOut.flush();
-				
-				while (true) {
-					String line = trackerIn.readLine();
-					if (line == null) break;
-					out.println(line);
-					System.out.println("///"+line+"///"); //TODO delete
-				}
-			} catch (IOException e){
-				e.printStackTrace();
-				close();
-			}
-		} if(!found){
-			System.out.println("Remote server address (tracker) not found.");
-		} 
+	public BufferedReader getInput() {
+		return this.in;
+	}
+	public void send(Message msg) {
+		System.out.println("Message to: \n"+socket.getInetAddress().getHostAddress()+"\n"+
+				socket.getInetAddress().getHostName()+"\n"+msg+"END OF MESSAGE\n");
+		out.print(msg);
+		out.flush();
 	}
 	/** Odpojí klienta. */
 	public void close() {
@@ -105,9 +65,9 @@ public class ClientThread extends Thread {
 			out.close();
 			in.close();
 			socket.close();
-			if(trackerOut!=null)trackerOut.close();
-			if(trackerIn!=null)trackerIn.close();
-			if(trackerSocket!=null)trackerSocket.close();
+//			if(trackerOut!=null)trackerOut.close();
+//			if(trackerIn!=null)trackerIn.close();
+//			if(trackerSocket!=null)trackerSocket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

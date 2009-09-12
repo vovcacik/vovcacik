@@ -1,0 +1,1 @@
+java.util.regex.Pattern.quote("^GET http://(.+?):?(\\d*)/.* HTTP/\\d.\\d$");

@@ -1,6 +1,7 @@
 package logic;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
@@ -17,10 +18,8 @@ public class ProxyServer {
 			proxyServer = new ServerSocket(PROXY_PORT);// naslouchající na 0.0.0.0
 			while (true) {
 				Socket s = proxyServer.accept();
-				ClientThread newClient = new ClientThread(s, this);
+				getNewClient(s).start();
 				System.out.println("New client: " + s.getInetAddress());
-				clients.add(newClient);
-				newClient.start();
 			}
 		} catch (IOException e) {
 			e.printStackTrace(System.err);
@@ -38,6 +37,7 @@ public class ProxyServer {
 		}
 	}
 
+
 	/**
 	 * Vrací seznam klientù. * Tuto metodu je nutné používat místo pøímého
 	 * pøístupu k promìnné clients - * - ten není synchronizovaný.
@@ -45,7 +45,23 @@ public class ProxyServer {
 	public synchronized List<ClientThread> getClients() {
 		return clients;
 	}
-	
+
+	public ClientThread getNewClient(InetAddress dstInetAddress, int dstPort) {
+		Socket socket = null;
+		try {
+			socket = new Socket(dstInetAddress, dstPort);
+		} catch (IOException e) {
+			System.err.println("Could not create new socket to "+dstInetAddress.getHostAddress()+" on port "+dstPort);
+			e.printStackTrace();
+		}
+		return getNewClient(socket);
+	}
+	public ClientThread getNewClient(Socket socket) {
+		ClientThread client = null;
+		client = new ClientThread(socket,this);
+		getClients().add(client);
+		return client;
+	}
 	public static void main(String[] args) {
 		new ProxyServer().run();
 	}
