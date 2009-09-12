@@ -13,6 +13,7 @@ public class ClientThread extends Thread {
 	PrintStream out;
 	BufferedReader in;
 	ClientThread dst;
+	private boolean threadDone = false;
 
 	public ClientThread(Socket socket, ProxyServer server) {
 		this.socket = socket;
@@ -28,17 +29,25 @@ public class ClientThread extends Thread {
 	}
 
 	public void run() {
-		while(true) {
-			Message msg = new Message(this);
-			if(dst == null) {
-				InetAddress dstInetAddress = msg.getDstInetAddress();
-				int dstPort = msg.getDstPort();
-				dst = proxyServer.getNewClient(dstInetAddress, dstPort);
-				dst.setDst(this);
-				msg.loadAll();
-				dst.start();
+		while(!threadDone) {
+			try {
+				if (in.ready()){
+					Message msg = new Message(this);
+					if(dst == null) {
+						InetAddress dstInetAddress = msg.getDstInetAddress();
+						int dstPort = msg.getDstPort();
+						dst = proxyServer.getNewClient(dstInetAddress, dstPort);
+						dst.setDst(this);
+						msg.loadAll();
+						dst.start();
+					}
+					dst.send(msg);
+					if (msg.isResponse() && msg.isClose()) this.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				close();
 			}
-			dst.send(msg);
 		}
 	}
 	void setDst(ClientThread dst) {
@@ -65,7 +74,12 @@ public class ClientThread extends Thread {
 			e.printStackTrace();
 		}
 		proxyServer.getClients().remove(dst);
-		if (dst!=null) dst.close();
+		dst.setDone(true);
 		dst=null;
+		this.threadDone  = true;
+	}
+
+	void setDone(boolean done) {
+		this.threadDone = done;
 	}
 }

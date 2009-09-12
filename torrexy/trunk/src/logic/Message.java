@@ -10,6 +10,7 @@ public class Message {
 	//group 1 inetAddress of destination; group 2 port of dst
 	private static final String TRACKER_URI_PATTERN = "^GET http://(.+?):?(\\d*)/.* HTTP/\\d.\\d$";
 	private boolean loadedAll = false;
+	private boolean close = false;
 	ClientThread src;
 	ClientThread dst;
 	String msg;
@@ -94,11 +95,23 @@ public class Message {
 		try {
 			while(src.getInput().ready()){
 				line = src.getInput().readLine();
+				if (line.equals("Connection: close")){
+					this.close = true;
+				}
 				msg += line+"\n"; //TODO optimalizovat naèítání øetìzcù
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		this.loadedAll = true;
+	}
+
+	public boolean isResponse() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	public boolean isClose() { //TODO název?
+		return this.close;
 	}
 }
