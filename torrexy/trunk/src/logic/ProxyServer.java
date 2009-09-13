@@ -19,7 +19,6 @@ public class ProxyServer {
 			while (true) {
 				Socket s = proxyServer.accept();
 				getNewClient(s).start();
-				System.out.println("New client: " + s.getInetAddress().getHostAddress()+", "+s.getInetAddress().getHostName());
 			}
 		} catch (IOException e) { //TODO vyhazuje více vyjímek - ošetøit
 			e.printStackTrace(System.err);
@@ -65,6 +64,7 @@ public class ProxyServer {
 		ClientThread client = null;
 		client = new ClientThread(socket,this);
 		getClients().add(client);
+		System.out.println("New client: " + socket.getInetAddress().getHostAddress()+", "+socket.getInetAddress().getHostName());
 		return client;
 	}
 	public static void main(String[] args) {
