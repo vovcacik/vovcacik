@@ -17,9 +17,9 @@ public class Message {
 	String dstAddress = null; //TODO rozpustit tyto atributy
 	int dstPort = 80;
 
-	public Message(ClientThread src) {
+	public Message(ClientThread src, ClientThread dst) {
 		this.src = src;
-		this.dst = null;
+		this.dst = dst;
 		this.msg = "";
 		loadInitialRequestLine();
 	}
@@ -106,12 +106,15 @@ public class Message {
 		this.loadedAll = true;
 	}
 
-	public boolean isResponse() {
-		// TODO Auto-generated method stub
-		return true;
+	public void deliver() {
+		dst.send(this); //ošetøit NPE
+		if(close) {
+			src.close();
+			dst.close();
+		}
 	}
 
-	public boolean isClose() { //TODO název?
-		return this.close;
+	public void setDst(ClientThread dst) {
+		this.dst = dst;
 	}
 }

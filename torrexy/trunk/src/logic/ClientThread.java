@@ -32,17 +32,17 @@ public class ClientThread extends Thread {
 		while(!threadDone) {
 			try {
 				if (in.ready()){
-					Message msg = new Message(this);
+					Message msg = new Message(this, dst);
 					if(dst == null) {
 						InetAddress dstInetAddress = msg.getDstInetAddress();
 						int dstPort = msg.getDstPort();
 						dst = proxyServer.getNewClient(dstInetAddress, dstPort);
 						dst.setDst(this);
+						msg.setDst(dst);
 						msg.loadAll();
 						dst.start();
 					}
-					dst.send(msg);
-					if (msg.isResponse() && msg.isClose()) this.close();
+					msg.deliver();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -58,8 +58,8 @@ public class ClientThread extends Thread {
 		return this.in;
 	}
 	public void send(Message msg) {
-		System.out.println("Message to: \n"+socket.getInetAddress().getHostAddress()+"\n"+
-				socket.getInetAddress().getHostName()+"\n"+msg+"END OF MESSAGE\n");
+//		System.out.println("Message to: \n"+socket.getInetAddress().getHostAddress()+"\n"+
+//				socket.getInetAddress().getHostName()+"\n"+msg+"END OF MESSAGE\n");
 		out.print(msg);
 		out.flush();
 	}
@@ -73,10 +73,9 @@ public class ClientThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		proxyServer.getClients().remove(dst);
-		dst.setDone(true);
+		if(dst != null) dst.setDone(true);
 		dst=null;
-		this.threadDone  = true;
+		setDone(true);
 	}
 
 	void setDone(boolean done) {
