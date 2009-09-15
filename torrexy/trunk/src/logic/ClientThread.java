@@ -32,7 +32,8 @@ public class ClientThread extends Thread {
 		while(!threadDone) {
 			try {
 				if (in.ready()){
-					Message msg = new Message(this, dst);
+					Message msg = MessageParser.parse(getInput(), this, dst);
+//					Message msg = new Message(this, dst);
 					if(dst == null) {
 						InetAddress dstInetAddress = msg.getDstInetAddress();
 						int dstPort = msg.getDstPort();

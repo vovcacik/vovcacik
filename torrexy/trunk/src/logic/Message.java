@@ -1,27 +1,57 @@
 package logic;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Message {
 	//group 1 inetAddress of destination; group 2 port of dst
 	private static final String TRACKER_URI_PATTERN = "^GET http://(.+?):?(\\d*)/.* HTTP/\\d.\\d$";
+	private static final String CONTENT_LENGTH_PATTERN = "^Content-Length: (\\d+)$";
 	private boolean loadedAll = false;
 	private boolean close = false;
+	private List<String> headers;
+	private List<String> data;
 	ClientThread src;
 	ClientThread dst;
 	String msg;
 	String dstAddress = null; //TODO rozpustit tyto atributy
 	int dstPort = 80;
+	private long dataLength = 0;
+	
 
 	public Message(ClientThread src, ClientThread dst) {
 		this.src = src;
 		this.dst = dst;
 		this.msg = "";
+		this.headers = new ArrayList<String>();
+		this.data = new ArrayList<String>();
 		loadInitialRequestLine();
+	}
+
+	public static Message getInstance(String initialLine, ClientThread src, ClientThread dst) {
+		if (initialLine.startsWith("GET")) return new GETRequest(src, dst);
+		return null;
+	}
+	
+	void addHeader(String headerLine) {
+		headers.add(headerLine);
+		if (headerLine.startsWith("Content-length: ")) {
+			Pattern pattern = Pattern.compile(CONTENT_LENGTH_PATTERN);
+			Matcher matcher = pattern.matcher(headerLine);
+			if (matcher.find()) {
+				dataLength = Integer.parseInt(matcher.group(1));//TODO otestovat
+			}
+		}
+	}
+	
+	public void addData(String dataLine) {
+		data.add(dataLine);
 	}
 
 	private void loadInitialRequestLine() {
@@ -116,5 +146,9 @@ public class Message {
 
 	public void setDst(ClientThread dst) {
 		this.dst = dst;
+	}
+
+	public long getDataLength() {
+		return this.dataLength ;
 	}
 }

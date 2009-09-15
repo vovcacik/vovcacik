@@ -1,0 +1,106 @@
+<class-diagram version="0.9.86" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class corner="BOTTOM_RIGHT" language="java" name="logic.ProxyServer" project="torrexy" 
+    file="/torrexy/src/logic/ProxyServer.java" binary="false">    
+    <position x="144" y="4" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="logic.MessageParser" project="torrexy" 
+    file="/torrexy/src/logic/MessageParser.java" binary="false">    
+    <position x="431" y="-50" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="logic.Message" project="torrexy" 
+    file="/torrexy/src/logic/Message.java" binary="false">    
+    <position x="759" y="145" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="logic.GETRequest" project="torrexy" 
+    file="/torrexy/src/logic/GETRequest.java" binary="false">    
+    <position x="792" y="475" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="logic.ClientThread" project="torrexy" 
+    file="/torrexy/src/logic/ClientThread.java" binary="false">    
+    <position x="187" y="369" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="true" protected="true" private="true"/>    
+    </display>  
+  </class>  
+  <association>    
+    <source project="torrexy" name="logic.ClientThread" file="/torrexy/src/logic/ClientThread.java" binary="false" 
+      navigable="false">      
+      <attribute name="dst"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="torrexy" name="logic.ClientThread" file="/torrexy/src/logic/ClientThread.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <bendpoint x="437" y="241"/>    
+    <source project="torrexy" name="logic.Message" file="/torrexy/src/logic/Message.java" binary="false" 
+      navigable="false">      
+      <attribute name="dst"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="torrexy" name="logic.ClientThread" file="/torrexy/src/logic/ClientThread.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <bendpoint x="216" y="169"/>    
+    <source project="torrexy" name="logic.ClientThread" file="/torrexy/src/logic/ClientThread.java" binary="false" 
+      navigable="false">      
+      <attribute name="proxyServer"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="torrexy" name="logic.ProxyServer" file="/torrexy/src/logic/ProxyServer.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <bendpoint x="95" y="182"/>    
+    <source project="torrexy" name="logic.ProxyServer" file="/torrexy/src/logic/ProxyServer.java" binary="false" 
+      navigable="false">      
+      <attribute name="clients"/>      
+      <multiplicity minimum="0" maximum="2147483647"/>    
+    </source>    
+    <target project="torrexy" name="logic.ClientThread" file="/torrexy/src/logic/ClientThread.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization>    
+    <source project="torrexy" name="logic.GETRequest" file="/torrexy/src/logic/GETRequest.java" binary="false"/>    
+    <target project="torrexy" name="logic.Message" file="/torrexy/src/logic/Message.java" binary="false"/>  
+  </generalization>  
+  <association>    
+    <bendpoint x="462" y="354"/>    
+    <source project="torrexy" name="logic.Message" file="/torrexy/src/logic/Message.java" binary="false" 
+      navigable="false">      
+      <attribute name="src"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="torrexy" name="logic.ClientThread" file="/torrexy/src/logic/ClientThread.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="true" protected="true" private="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
